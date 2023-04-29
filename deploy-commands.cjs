@@ -1,7 +1,8 @@
 // Run this whenever changes in Description
 
 const { REST, Routes } = require('discord.js');
-const { clientId, guildId, token } = require('./config.json');
+const clientId = process.env.clientId;
+const token = process.env.DISCORD_TOKEN;
 const fs = require('node:fs');
 const path = require('node:path');
 
