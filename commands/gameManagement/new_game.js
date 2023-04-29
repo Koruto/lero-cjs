@@ -19,8 +19,8 @@ async function execute(interaction) {
     const channel = await interaction.guild.channels.create({
       name: place,
     });
-    channel.setParent(Game.categoryId);
-    channel.edit({
+    await channel.setParent(Game.categoryId);
+    await channel.edit({
       name: place,
       permissionOverwrites: [
         {
@@ -34,7 +34,7 @@ async function execute(interaction) {
       ],
     });
     if (place !== 'Town Square') {
-      channel.send(`
+      await channel.send(`
 Welcome to a private room!
     
 Use this room as you'd like.
