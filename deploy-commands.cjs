@@ -5,7 +5,7 @@ const clientId = process.env.clientId;
 const token = process.env.DISCORD_TOKEN;
 const fs = require('node:fs');
 const path = require('node:path');
-
+console.log(clientId + "\n" + token)
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
 const foldersPath = path.join(__dirname, 'commands');
