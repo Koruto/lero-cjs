@@ -8,7 +8,22 @@ module.exports = {
     await interaction.deferReply();
     await interaction.deleteReply();
 
-    await interaction.channel.send("Started interval: 12s & 48s");
+    await interaction.channel.send("Started interval: 24s");
+
+     let dayend = setTimeout(Boolean(1), 24000);
+
+    do
+    {
+        if(dayend == '1')
+            {
+                interaction.channel.send("Interval completed.")
+            }
+    }
+    while(dayend != '1')
+    
+
+    
+     
 
   },
 };
