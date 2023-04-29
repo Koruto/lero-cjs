@@ -1,6 +1,8 @@
 // Run this whenever changes in Description
 
 const { REST, Routes } = require('discord.js');
+const dotenv = require('dotenv');
+dotenv.config();
 const clientId = process.env.clientId;
 const token = process.env.DISCORD_TOKEN;
 const fs = require('node:fs');
