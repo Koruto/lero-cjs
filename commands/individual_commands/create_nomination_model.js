@@ -8,14 +8,11 @@ const data = new SlashCommandBuilder()
   .setName('create-nomination-model')
   .setDescription(
     'Creates the model (to be integrated into new-game at end), Admin Only!'
-  );
+  )
+  .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
   // Check if User is doing command from Private room or not
-  if (interaction.user.id != '404966968005754882') {
-    await interaction.reply(`Imposter Detected, SMH Shame on YOU !!`);
-    return;
-  }
 
   await interaction.guild.members.fetch();
   const playingMembers = interaction.guild.members.cache

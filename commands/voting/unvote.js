@@ -11,6 +11,13 @@ const data = new SlashCommandBuilder()
   .setDescription('Removes your vote from current player being nominated!');
 
 async function execute(interaction) {
+  if (Game.isNightTime) {
+    await interaction.reply({
+      content: 'Cannot use this command at night',
+      ephemeral: true,
+    });
+    return;
+  }
   await checkOngoing(interaction);
 
   if (!interaction.member.roles.cache.has(Game.playingId)) {

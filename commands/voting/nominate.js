@@ -19,6 +19,13 @@ const data = new SlashCommandBuilder()
   );
 
 async function execute(interaction) {
+  if (Game.isNightTime) {
+    await interaction.reply({
+      content: 'Cannot use this command at night',
+      ephemeral: true,
+    });
+    return;
+  }
   //   const db = await openConnection();
   const nominationFinishingTime =
     Math.floor(interaction.createdTimestamp / 1000) + Game.twelveHoursInMs;

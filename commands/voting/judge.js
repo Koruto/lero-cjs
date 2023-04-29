@@ -8,6 +8,13 @@ const data = new SlashCommandBuilder()
   .setDescription('Displays current Votes!');
 
 async function execute(interaction) {
+  if (Game.isNightTime) {
+    await interaction.reply({
+      content: 'Cannot use this command at night',
+      ephemeral: true,
+    });
+    return;
+  }
   // Check if User is doing command from Private room or not
   await interaction.reply('.');
   const db = new sqlite3.Database(

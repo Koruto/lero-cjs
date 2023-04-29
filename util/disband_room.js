@@ -1,5 +1,6 @@
+const { Game } = require('./constants');
+
 async function disbandRoom(interaction) {
-  const categoryId = '1100059677380849774'; // replace with your category ID
   const channelId = interaction.channel.id;
   const channel = interaction.guild.channels.cache.get(channelId); // replace with your channel ID
 
@@ -17,16 +18,20 @@ No one else will see this conversation without someone's permission, so don't wo
   
 To leave,  use /leave-room
 P.S. If the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`);
-  if (channel.parentID !== categoryId) {
+  if (channel.parentID !== Game.archivedCategoryId) {
     try {
-      await channel.setParent(categoryId);
+      await channel.setParent(Game.archivedCategoryId);
       channel.edit({ position: 0 });
-      console.log(`Moved channel ${channel.name} to category ${categoryId}`);
+      console.log(
+        `Moved channel ${channel.name} to category ${Game.archivedCategoryId}`
+      );
     } catch (error) {
       console.error(`Failed to move channel ${channel.name}: ${error}`);
     }
   } else {
-    console.log(`Channel ${channel.name} is already in category ${categoryId}`);
+    console.log(
+      `Channel ${channel.name} is already in category ${Game.archivedCategoryId}`
+    );
   }
 
   await interaction.followUp(`Command Reached!`);

@@ -25,6 +25,15 @@ for (let i = 1; i <= 1; i++) {
 
 async function execute(interaction) {
   // If Condition for Wrong Access
+
+  if (Game.isNightTime) {
+    await interaction.reply({
+      content: 'Cannot use this command at night',
+      ephemeral: true,
+    });
+    return;
+  }
+
   const interactionUser = await interaction.guild.members.cache.get(
     interaction.user.id
   );

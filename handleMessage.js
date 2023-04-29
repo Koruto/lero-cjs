@@ -1,6 +1,6 @@
 import { ROOM_LIMIT } from './constants';
 
-export function handleMessage(message, client) {
+export function handleMessage(message) {
   if (message.content.startsWith('&create room')) {
     const userIds = message.mentions.users.keyArray();
     userIds.push(message.author.id);
