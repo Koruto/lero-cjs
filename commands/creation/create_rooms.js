@@ -1,10 +1,10 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('create-rooms')
-  .setDescription(
-    'Creates the 10 Roles for Chanel, Only for admin dont use it'
-  );
+  .setDescription('Creates the 10 Roles for Chanel, Only for admin dont use it')
+  .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
   if (interaction.user.id != '404966968005754882') {
@@ -14,37 +14,23 @@ async function execute(interaction) {
 
   await interaction.reply(`Command Reached! Creating Roles`);
   // Assuming you have already fetched the guild and created the roles
-  const categoryId = '1100059641498574949';
-  const placeRoles = {
-    'The Blacksmith Shop': '1100061352636186675',
-    'The Infirmary': '1100061354901123153',
-    'The Tavern': '1100061357182812311',
-    'The Main Garden': '1100061359988813934',
-    'The Edge of Town': '1100061361951752225',
-    'The Train Station': '1100061364615135242',
-    'The Alley': '1100061366733258824',
-    'The Inn': '1100061369170149487',
-    'The Sheriff Station': '1100061371598647446',
-    'The Carpentry Shop': '1100061374241058870',
-    'Town Square': '1100061376694722693',
-  };
-  const viewChannelPermission = '0x0000000000000400';
-  for (const place in placeRoles) {
+
+  for (const place in Game.placeRoles) {
     // Create the channel
     const channel = await interaction.guild.channels.create({
       name: place,
     });
-    channel.setParent(categoryId);
+    channel.setParent(Game.categoryId);
     channel.edit({
       name: place,
       permissionOverwrites: [
         {
-          id: placeRoles[place],
-          allow: viewChannelPermission,
+          id: Game.placeRoles[place],
+          allow: Game.viewChannelPermission,
         },
         {
           id: interaction.guild.id,
-          deny: viewChannelPermission,
+          deny: Game.viewChannelPermission,
         },
       ],
     });

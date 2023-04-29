@@ -6,10 +6,6 @@ const {
 const { checkOngoing } = require('../../util/timeFunctions');
 const { Game } = require('../../util/constants');
 
-const playingId = '1101087801925181485';
-const deadId = '1101602543454408764';
-const ROOM_LIMIT = 3;
-
 const data = new SlashCommandBuilder()
   .setName('history')
   .setDescription('Gets history of people talked to that User!')
@@ -24,20 +20,20 @@ async function execute(interaction) {
   const db = await openConnection();
   const userHistory = await interaction.options.getUser('user').username;
 
-  if (!interaction.member.roles.cache.has(playingId)) {
+  if (!interaction.member.roles.cache.has(Game.playingId)) {
     await interaction.reply('Join the game to use its feature :)');
     return;
   }
 
   const taggedUserId = interaction.options.getUser('user').id;
   const taggedUser = interaction.guild.members.cache.get(taggedUserId);
-  if (!taggedUser.roles.cache.has(playingId)) {
+  if (!taggedUser.roles.cache.has(Game.playingId)) {
     await interaction.reply('History only for playing players');
     return;
   }
 
   let query = `SELECT * FROM History WHERE `;
-  for (let i = 1; i <= ROOM_LIMIT; i++) {
+  for (let i = 1; i <= Game.ROOM_LIMIT; i++) {
     query += `user${i} = '${userHistory}' OR `;
   }
   query = query.slice(0, -3);

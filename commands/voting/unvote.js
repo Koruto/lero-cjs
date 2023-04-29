@@ -4,10 +4,7 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
-
-const playingId = '1101087801925181485';
-const noVoteId = '1101602215212372179';
-const deadId = '1101602543454408764';
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('unvote')
@@ -16,7 +13,7 @@ const data = new SlashCommandBuilder()
 async function execute(interaction) {
   await checkOngoing(interaction);
 
-  if (!interaction.member.roles.cache.has(playingId)) {
+  if (!interaction.member.roles.cache.has(Game.playingId)) {
     await interaction.reply('Join the game to use its feature :)');
     return;
   }
@@ -38,10 +35,10 @@ async function execute(interaction) {
         ['0', row.id]
       );
       await interaction.reply('Vote Removed');
-      if (interaction.member.roles.cache.has(noVoteId)) {
+      if (interaction.member.roles.cache.has(Game.noVoteId)) {
         await interaction.followUp('You regained your dead vote!');
 
-        interaction.member.roles.remove(noVoteId);
+        interaction.member.roles.remove(Game.noVoteId);
       }
 
       console.log(`Row updated: ${row.id}`);

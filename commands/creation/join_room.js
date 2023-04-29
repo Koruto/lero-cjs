@@ -5,10 +5,6 @@ const {
 } = require('../../database/interactWithDB');
 const { Game } = require('../../util/constants');
 
-const townSquareRole = '1100061376694722693';
-const playingRole = '';
-const categoryId = '1100059641498574949';
-
 const data = new SlashCommandBuilder()
   .setName('join-room')
   .setDescription('Joins a Room!')
@@ -39,7 +35,7 @@ async function execute(interaction) {
     });
     return;
   }
-  if (!interactionUser.roles.cache.has(townSquareRole)) {
+  if (!interactionUser.roles.cache.has(Game.townSquareRole)) {
     await interaction.reply({
       content: 'Command only for people in Town Square',
       ephemeral: true,
@@ -60,7 +56,8 @@ async function execute(interaction) {
   // Checking players availablity
   target.forEach(async (user) => {
     const member = await interaction.guild.members.cache.get(user.id);
-    if (!member.roles.cache.has(townSquareRole)) playersNotAvailable = true;
+    if (!member.roles.cache.has(Game.townSquareRole))
+      playersNotAvailable = true;
   });
 
   if (playersNotAvailable) {
@@ -77,7 +74,7 @@ async function execute(interaction) {
   const channelNames = await interaction.guild.channels.cache
     .filter(
       (channel) =>
-        channel.parentId === categoryId &&
+        channel.parentId === Game.categoryId &&
         !channel.name.endsWith('_') &&
         channel.name != 'town-square'
     )
@@ -101,7 +98,7 @@ async function execute(interaction) {
     const member = await interaction.guild.members.cache.get(user.id);
     if (role) {
       await member.roles.add(role.id);
-      await member.roles.remove(townSquareRole);
+      await member.roles.remove(Game.townSquareRole);
     }
   });
 

@@ -6,11 +6,7 @@ const {
 const { checkOngoing } = require('../../util/timeFunctions');
 const { Game } = require('../../util/constants');
 
-const playingId = '1101087801925181485';
-const deadId = '1101602543454408764';
-const aliveId = '1101859415767924930';
-//   const twelveHoursInMs = 43200; // 12 hours in seconds
-const twelveHoursInMs = 60; // 1 minute in seconds
+//   const Game.twelveHoursInMs = 43200; // 12 hours in seconds
 
 const data = new SlashCommandBuilder()
   .setName('nominate')
@@ -25,7 +21,7 @@ const data = new SlashCommandBuilder()
 async function execute(interaction) {
   //   const db = await openConnection();
   const nominationFinishingTime =
-    Math.floor(interaction.createdTimestamp / 1000) + twelveHoursInMs;
+    Math.floor(interaction.createdTimestamp / 1000) + Game.twelveHoursInMs;
 
   const db = await openConnection();
   const nominated = await interaction.options.getUser('user').username;
@@ -33,7 +29,7 @@ async function execute(interaction) {
   // TODO Also check day,
 
   // Check if User is playing or not
-  if (!interaction.member.roles.cache.has(playingId)) {
+  if (!interaction.member.roles.cache.has(Game.playingId)) {
     await interaction.reply('Join the game to use its feature :)');
     return;
   }
@@ -41,12 +37,12 @@ async function execute(interaction) {
   // Check if user being nominated is playing or not
   const taggedUserId = interaction.options.getUser('user').id;
   const taggedUser = interaction.guild.members.cache.get(taggedUserId);
-  if (!taggedUser.roles.cache.has(playingId)) {
+  if (!taggedUser.roles.cache.has(Game.playingId)) {
     await interaction.reply('Only Nominate playing players');
     return;
   }
 
-  if (interaction.member.roles.cache.has(deadId)) {
+  if (interaction.member.roles.cache.has(Game.deadId)) {
     await interaction.reply(
       'Dead people have no rights, so you cannot nominate!'
     );
@@ -76,35 +72,55 @@ async function execute(interaction) {
     `SELECT COUNT(*) as count FROM Nominations WHERE day = ? AND nominee = ?`,
     [Game.currentDay, nominee]
   );
-  if (alreadyNominated.count) {
-    await interaction.reply(
-      'You already nominated for the day, cannot nominate again'
-    );
-    return;
-  }
+  // if (alreadyNominated.count) {
+  //   await interaction.reply(
+  //     'You already nominated for the day, cannot nominate again'
+  //   );
+  //   return;
+  // }
 
   // Calculate Majority
-
+  await interaction.guild.members.fetch();
   const aliveMembers = await interaction.guild.members.cache.filter((member) =>
-    member.roles.cache.has(aliveId)
+    member.roles.cache.has(Game.aliveId)
   ).size;
 
   // Print out the members with the role
-  const majority = aliveMembers / 2 + 1;
+  const majority = Math.floor(aliveMembers / 2) + 1;
 
   await db.run(
     `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority ,createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
     [Game.currentDay, nominated, nominee, 1, majority, nominationFinishingTime]
   );
-  await interaction.reply(`
+  let nominationMessage = `
 The town gathers in the centre for a very needed conversation. ${nominated} is placed in the centre for everyone to see. It is time to judge their character.
 
 @alive and @dead if anyone would like for the execution go forward please vote with:
   
 Type /vote for voting
   
-The vote will be open for 12 hours(currently 1 minute). You may take back your vote. Just ping me in the centre and tell me so.`);
+The vote will be open for 12 hours(currently 1 minute). You may take back your vote. Just ping me in the centre and tell me so.
+`;
+
+  // Checking if previous nomination was succesful
+  const newMajority = await db.get(
+    `SELECT * FROM Nominations WHERE day = ${Game.currentDay} AND votes >= majority ORDER BY votes DESC LIMIT 1`
+  );
+  // Check votes column
+
+  if (newMajority)
+    nominationMessage += `
+One player is already nominated, to stop that get ${
+      newMajority.votes
+    } votes, and to make this player nominate get ${
+      newMajority.votes + 1
+    } votes`;
+  else
+    nominationMessage += `
+Current majority is ${majority}`;
+
   await closeConnection(db);
+  await interaction.reply(nominationMessage);
 
   // Pinging
 

@@ -1,20 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const disbandRoom = require('../../util/disband_room.js');
 
-const ROOM_LIMIT = 3;
-const townSquareRole = '1100061376694722693';
-const validRooms = [
-  'the-blacksmith-shop_',
-  'the-infirmary_',
-  'the-tavern_',
-  'the-main-garden_',
-  'the-edge-of-town_',
-  'the-train-station_',
-  'the-alley_',
-  'the-inn_',
-  'the-sheriff-station_',
-  'the-carpentry-shop_',
-];
+const { Game, ROOM_LIMIT } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('leave-room')
@@ -23,7 +10,7 @@ const data = new SlashCommandBuilder()
 async function execute(interaction) {
   // Check if User is doing command from Private room or not
   const roomName = interaction.channel.name;
-  if (!validRooms.includes(roomName)) {
+  if (!Game.validRooms.includes(roomName)) {
     await interaction.reply({
       content: 'Use Command in Private Room',
       ephemeral: true,
@@ -35,7 +22,7 @@ async function execute(interaction) {
   const member = interaction.member;
 
   //   Check if the member has the specific role ID
-  if (member.roles.cache.has(townSquareRole)) {
+  if (member.roles.cache.has(Game.townSquareRole)) {
     await interaction.reply({
       content: 'You cannot leave from the general area!',
       ephemeral: true,
@@ -75,7 +62,7 @@ async function execute(interaction) {
   if (count < ROOM_LIMIT) {
     for (const [key, value] of channelMembers.entries()) {
       value.roles.remove(role.id);
-      value.roles.add(townSquareRole);
+      value.roles.add(Game.townSquareRole);
     }
     disbandRoom(interaction);
   }

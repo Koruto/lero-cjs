@@ -2,7 +2,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
-const ROOM_LIMIT = 3;
+const { ROOM_LIMIT } = require('../util/constants');
 
 async function define_History() {
   const db = await openConnection();

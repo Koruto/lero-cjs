@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { define_Nomination } = require('../../models/nomination');
 const { define_History } = require('../../models/history');
-const { Sequelize, Model, DataTypes } = require('sequelize');
-const playingId = '1101087801925181485';
+const { define_Game } = require('../../models/gameConstants');
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('create-nomination-model')
@@ -19,12 +19,12 @@ async function execute(interaction) {
 
   await interaction.guild.members.fetch();
   const playingMembers = interaction.guild.members.cache
-    .filter((member) => member.roles.cache.has(playingId))
+    .filter((member) => member.roles.cache.has(Game.playingId))
     .map((member) => member.user.id);
   // console.log(playingMembers);
 
-  const me = interaction.user.id;
-  define_Nomination(playingMembers, me);
+  define_Nomination(playingMembers);
+  define_Game();
   // define_History();  To be added later on
 
   await interaction.reply('Reached');
