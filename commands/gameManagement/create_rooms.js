@@ -7,12 +7,7 @@ const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
-  if (interaction.user.id != '404966968005754882') {
-    await interaction.reply(`Imposter Detected, SMH Shame on YOU !!`);
-    return;
-  }
-
-  await interaction.reply(`Command Reached! Creating Roles`);
+  await interaction.reply(`Command Reached! Creating Channels`);
   // Assuming you have already fetched the guild and created the roles
 
   for (const place in Game.placeRoles) {
