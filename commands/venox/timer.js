@@ -4,19 +4,18 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('timer')
     .setDescription('Test command to set required time'),
-  async execute(interaction) {
+  async execute(interaction, client) {
     await interaction.deferReply();
-    await interaction.deleteReply();
+    await interaction.reply("Started interval: 24s");
 
-    await interaction.channel.send("Started interval: 24s");
     const start = Date.now()
+
      setTimeout(function()
         {
         const end = Date.now();
         interaction.channel.send(`Total time passed:${(end - start)/1000}s`)
+        client.channels.cache.get('1100799293079691394').send(`Alternative send method`)
         }, 24000);
-
-    
 
   },
 
