@@ -15,7 +15,7 @@ let Game = {
   noVoteId: '1101602215212372179',
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
-  twelveHoursInMs: 30,
+  twelveHoursInMs: 120,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',
@@ -54,7 +54,8 @@ async function define_Variables() {
   Game.isNightTime = variables.night;
   await closeConnection(db);
 }
-await define_Variables();
+
+define_Variables();
 
 module.exports = {
   ROOM_LIMIT,
