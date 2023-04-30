@@ -4,10 +4,7 @@ const {
 } = require('../database/interactWithDB');
 
 const ROOM_LIMIT = 3;
-const PARENT_CATEGORY_ID = '881071692414345250';
-const ROOM_NAME = ['Chane', 'Tane', 'Rain']; // Keep all the names in capitalized case, can also give space
-// To Do: Do this so first letter is Capital and if any space exist or not?, just keep them in proper
-const DEFAULT_ROOM = 'Tane';
+
 // SOme problem with creating the default room, it should already exist, no?
 //   const twelveHoursInMs = 43200; // 12 hours in seconds
 // const twelveHoursInMs = 60; // 1 minute in seconds
@@ -57,7 +54,7 @@ async function define_Variables() {
   Game.isNightTime = variables.night;
   await closeConnection(db);
 }
-define_Variables();
+await define_Variables();
 
 module.exports = {
   ROOM_LIMIT,
