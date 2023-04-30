@@ -5,6 +5,7 @@ const {
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
 const { Game } = require('../../util/constants');
+const { nominationTimeTimer } = require('../../util/timeOverNomination');
 
 //   const Game.twelveHoursInMs = 43200; // 12 hours in seconds
 
@@ -129,6 +130,7 @@ Current majority is ${majority}`;
 
   await closeConnection(db);
   await interaction.reply(nominationMessage);
+  nominationTimeTimer(interaction);
 
   // Pinging
 

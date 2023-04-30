@@ -5,6 +5,7 @@ const {
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
 const { Game } = require('../../util/constants');
+const { nominationTimeTimer } = require('../../util/timeOverNomination');
 
 const data = new SlashCommandBuilder()
   .setName('unvote')
@@ -59,6 +60,7 @@ async function execute(interaction) {
   // Pinging
 
   await closeConnection(db);
+  nominationTimeTimer(interaction);
 
   const sent = await interaction.followUp({
     content: 'Pinging...',

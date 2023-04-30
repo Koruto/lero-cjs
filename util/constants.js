@@ -18,7 +18,7 @@ let Game = {
   noVoteId: '1101602215212372179',
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
-  twelveHoursInMs: 60,
+  twelveHoursInMs: 30,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',

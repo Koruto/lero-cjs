@@ -4,6 +4,7 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { Game } = require('../../util/constants');
+const { nominationTimeTimer } = require('../../util/timeOverNomination');
 
 const data = new SlashCommandBuilder()
   .setName('judge')
@@ -52,6 +53,7 @@ Keira is up for execution.
     message = 'No Ongoing Nomination Currently';
     return;
   }
+  nominationTimeTimer(interaction);
 
   // Pinging
   message += '```';

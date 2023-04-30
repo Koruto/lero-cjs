@@ -4,6 +4,7 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
+const { nominationTimeTimer } = require('../../util/timeOverNomination');
 
 const { Game } = require('../../util/constants');
 
@@ -60,6 +61,7 @@ async function execute(interaction) {
   // Pinging
 
   await closeConnection(db);
+  nominationTimeTimer(interaction);
 
   const sent = await interaction.followUp({
     content: 'Pinging...',

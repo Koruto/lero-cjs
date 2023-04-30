@@ -3,6 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const fs = require('fs').promises;
 const { checkOngoing } = require('../../util/timeFunctions');
 const { Game } = require('../../util/constants');
+const { startTimer } = require('../../util/startTimer');
 
 const playingId = '1101087801925181485';
 const deadId = '1101602543454408764';
@@ -14,9 +15,20 @@ const data = new SlashCommandBuilder()
   .setName('upgrade')
   .setDescription('Test!');
 
+async function type(interaction) {
+  await interaction.followUp('Follow up message');
+}
+
 async function execute(interaction) {
-  Game.currentDay += 1;
-  console.log(Game.currentDay);
+  startTimer(1682835966171 - interaction.createdTimestamp)
+    .then(async () => {
+      // Code to execute when promise resolves
+      await interaction.followUp('Working');
+    })
+    .catch((error) => {
+      // Code to execute when promise rejects
+      console.error(error);
+    });
 
   // Pinging
 
