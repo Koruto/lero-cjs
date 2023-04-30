@@ -8,6 +8,7 @@ module.exports = {
     await interaction.reply('Pong!');
     const message = await interaction.fetchReply();
     message.channel.send(`Dead people: <@&1101602543454408764>`)
+    message.channel.send(`Alive people: <@&1101859415767924930>`)
     message.channel.send(
       `Response Time: ${Date.now() - interaction.createdTimestamp}ms`
     );
