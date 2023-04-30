@@ -9,4 +9,4 @@ async function define_Variables() {
   console.log(variables);
   await closeConnection(db);
 }
-await define_Variables();
+define_Variables();
