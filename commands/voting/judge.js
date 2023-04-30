@@ -3,15 +3,16 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game } = require('../../util/constants');
 const { nominationTimeTimer } = require('../../util/timeOverNomination');
+const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('judge')
   .setDescription('Displays current Votes!');
 
 async function execute(interaction, client) {
-  if (Game.isNightTime) {
+  const timeOfDay = await define_Variables();
+  if (timeOfDay.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
       ephemeral: true,
@@ -53,7 +54,7 @@ Keira is up for execution.
     message = 'No Ongoing Nomination Currently';
     return;
   }
-  nominationTimeTimer(client);
+  nominationTimeTimer(interaction);
 
   // Pinging
   message += '```';

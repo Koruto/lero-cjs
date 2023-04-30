@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Game } = require('../../util/constants');
 const { define_Nomination } = require('../../models/nomination');
 const { define_History } = require('../../models/history');
 const { define_Game } = require('../../models/gameConstants');
+const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('new-game')

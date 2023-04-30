@@ -2,10 +2,11 @@ const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
-const { Game } = require('./constants');
+const { Game, define_Variables } = require('./constants');
+
 const { startTimer } = require('./startTimer');
 
-async function nominationTimeTimer(client) {
+async function nominationTimeTimer(interaction) {
   const db = await openConnection();
   // Check if User is doing command from Private room or not
   let message = '```';
@@ -14,20 +15,15 @@ async function nominationTimeTimer(client) {
     'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
   );
   if (!row) return;
+  if (interaction.createdTimestamp >= row.createdAt * 1000) return;
 
-  const currentTime = new Date();
-  const currentTimeInMs = currentTime.getTime();
-
-  if (currentTimeInMs >= row.createdAt * 1000) return;
-
-  startTimer(row.createdAt * 1000 - currentTimeInMs)
+  startTimer(row.createdAt * 1000 - interaction.createdTimestamp)
     .then(async () => {
-      const guild = await client.guilds.fetch(Game.guildId);
       message += `${row.nominated}'s execution player list:\n`;
       for (column in row) {
         if (column[0] == '_' && row[column]) {
           const userId = column.slice(1);
-          const member = await guild.members.fetch(userId);
+          const member = await interaction.guild.members.fetch(userId);
           const voterName = await member.user.username;
           message += `- ${voterName}`;
           message += (await member.roles.cache.has(Game.noVoteId))
@@ -47,8 +43,7 @@ async function nominationTimeTimer(client) {
       message += '```';
       await closeConnection(db);
 
-      const channels = await guild.channels.cache;
-      const channel = channels.find(
+      const channel = await interaction.guild.channels.cache.find(
         (channel) => channel.name === 'town-square'
       );
 

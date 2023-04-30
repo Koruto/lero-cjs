@@ -4,15 +4,16 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
-const { Game } = require('../../util/constants');
 const { nominationTimeTimer } = require('../../util/timeOverNomination');
+const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('unvote')
   .setDescription('Removes your vote from current player being nominated!');
 
 async function execute(interaction, client) {
-  if (Game.isNightTime) {
+  const timeOfDay = await define_Variables();
+  if (timeOfDay.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
       ephemeral: true,
@@ -60,7 +61,7 @@ async function execute(interaction, client) {
   // Pinging
 
   await closeConnection(db);
-  nominationTimeTimer(client);
+  nominationTimeTimer(interaction);
 
   const sent = await interaction.followUp({
     content: 'Pinging...',

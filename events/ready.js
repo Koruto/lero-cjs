@@ -6,6 +6,6 @@ module.exports = {
   once: true,
   async execute(client, interaction) {
     console.log(`Ready! Logged in as ${client.user.tag}`);
-    await nominationTimeTimer(client);
+    // await nominationTimeTimer(client);
   },
 };

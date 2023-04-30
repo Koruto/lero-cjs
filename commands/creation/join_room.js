@@ -3,7 +3,8 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game } = require('../../util/constants');
+const { Game, define_Variables } = require('../../util/constants');
+const { time } = require('console');
 
 const data = new SlashCommandBuilder()
   .setName('join-room')
@@ -25,8 +26,8 @@ for (let i = 1; i <= 1; i++) {
 
 async function execute(interaction) {
   // If Condition for Wrong Access
-
-  if (Game.isNightTime) {
+  const timeOfDay = await define_Variables();
+  if (timeOfDay.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
       ephemeral: true,
@@ -117,9 +118,10 @@ async function execute(interaction) {
     .edit({ name: randomChannel + '_' });
 
   // Adding to Database
+
   const db = await openConnection();
   let query = `INSERT INTO History (day`;
-  let values = `) VALUES ( ${Game.currentDay}`;
+  let values = `) VALUES ( ${timeOfDay.currentDay}`;
 
   for (let i = 0; i < target.length; i++) {
     if (target[i]) {

@@ -8,14 +8,12 @@ const ROOM_LIMIT = 3;
 // SOme problem with creating the default room, it should already exist, no?
 //   const twelveHoursInMs = 43200; // 12 hours in seconds
 // const twelveHoursInMs = 60; // 1 minute in seconds
-let Game = {
-  currentDay: 1,
-  isNightTime: 0,
+const Game = {
   playingId: '1101087801925181485',
   noVoteId: '1101602215212372179',
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
-  twelveHoursInMs: 120,
+  twelveHoursInMs: 10,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',
@@ -48,17 +46,23 @@ let Game = {
     'Town Square': '1100061376694722693',
   },
 };
+
 async function define_Variables() {
+  let timeOfDay = {
+    currentDay: 1,
+    isNightTime: 0,
+  };
+
   const db = await openConnection();
   const variables = await db.get(`SELECT * FROM Game WHERE id = 1`);
-  Game.currentDay = variables.day;
-  Game.isNightTime = variables.night;
+  timeOfDay.currentDay = variables.day;
+  timeOfDay.isNightTime = variables.night;
   await closeConnection(db);
+  return timeOfDay;
 }
 
-define_Variables();
-
 module.exports = {
-  ROOM_LIMIT,
   Game,
+  ROOM_LIMIT,
+  define_Variables,
 };
