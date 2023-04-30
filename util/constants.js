@@ -59,8 +59,5 @@ define_Variables();
 
 module.exports = {
   ROOM_LIMIT,
-  PARENT_CATEGORY_ID,
-  ROOM_NAME,
-  DEFAULT_ROOM,
   Game,
 };
