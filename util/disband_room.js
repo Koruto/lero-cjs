@@ -33,17 +33,6 @@ P.S. If the number of players are less than 2, Chat will be deleted immediately,
       `Channel ${channel.name} is already in category ${Game.archivedCategoryId}`
     );
   }
-
-  await interaction.followUp(`Command Reached!`);
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.editReply(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = disbandRoom;

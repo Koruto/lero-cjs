@@ -3,8 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, define_Variables } = require('../../util/constants');
-const { time } = require('console');
+const { Game, define_Variables, ROOM_LIMIT } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('join-room')
@@ -16,7 +15,7 @@ const data = new SlashCommandBuilder()
       .setRequired(true)
   );
 
-for (let i = 1; i <= 1; i++) {
+for (let i = 1; i <= ROOM_LIMIT; i++) {
   data.addUserOption((option) =>
     option.setName(`user${i}`).setDescription(`User ${i}`)
   );
@@ -56,8 +55,8 @@ async function execute(interaction) {
   // Adding players into an array
   let target = [interactionUser.user];
   target.push(await interaction.options.getUser('user'));
-  // ! Give the room limit here
-  for (let i = 1; i <= 1; i++) {
+
+  for (let i = 1; i <= ROOM_LIMIT; i++) {
     if (await interaction.options.getUser(`user${i}`))
       target.push(await interaction.options.getUser(`user${i}`));
   }
@@ -77,8 +76,18 @@ async function execute(interaction) {
     });
     return;
   }
-
-  await interaction.reply(`Request Received! Users to be added: ${target}`);
+  let targetNames = '';
+  target.forEach(async (user, index) => {
+    targetNames += user.username;
+    if (index < target.length - 2) {
+      targetNames += ', ';
+    } else if (index == target.length - 2) {
+      targetNames += ', and ';
+    }
+  });
+  await interaction.reply(
+    `Request Received! Users to be added: ${targetNames}`
+  );
 
   // Array of available rooms
   // ! Check if Can use the channel directly and just use edit at end
@@ -133,17 +142,6 @@ async function execute(interaction) {
   query += values + ')';
   await db.run(query);
   await closeConnection(db);
-
-  // User Pinging
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

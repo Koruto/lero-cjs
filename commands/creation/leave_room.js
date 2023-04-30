@@ -63,9 +63,6 @@ async function execute(interaction) {
     if (value._roles.includes(role.id)) count++;
   }
 
-  interaction.followUp(
-    `There are ${count} members with the role ${role.name}.`
-  );
   // TODO Better this Loop , so that it doesnt loop for each member again
   if (count < ROOM_LIMIT) {
     for (const [key, value] of channelMembers.entries()) {
@@ -79,15 +76,6 @@ async function execute(interaction) {
   }
 
   // Pinging
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.editReply(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

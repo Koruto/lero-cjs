@@ -22,7 +22,7 @@ async function execute(interaction) {
       const day = nomination.day;
       const nominee = nomination.nominee;
       const nominatedBy = nomination.nominated;
-      const votes = nomination.majority; // get the column value based on the user who nominated
+      const votes = nomination.votes; // get the column value based on the user who nominated
       const majority = nomination.majority;
       let playerVotes = [];
       for (const key in nomination) {
@@ -36,7 +36,7 @@ async function execute(interaction) {
         const memberName = member.displayName;
         memberNames.push(memberName);
       }
-      const resultString = `'${nominee}' was Nominated by '${nominatedBy}', [${votes}/${majority}] , Voted By: ${memberNames}`;
+      const resultString = `${nomination.id}: '${nominatedBy}' was Nominated by '${nominee}', [${votes}/${majority}] , Voted By: ${memberNames}`;
 
       if (!resultsByDay[day]) {
         resultsByDay[day] = [`${resultString}`];
@@ -57,18 +57,9 @@ Day ${day}:\n`;
   }
 
   await closeConnection(db);
+  await interaction.reply(nominationMessage);
 
   // Pinging
-  await interaction.reply(`Nominations as follows: ${nominationMessage}`);
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

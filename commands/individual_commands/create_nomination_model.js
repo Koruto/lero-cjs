@@ -25,16 +25,6 @@ async function execute(interaction) {
   define_History();
 
   await interaction.reply('Reached');
-  // Pinging
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

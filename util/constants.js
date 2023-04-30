@@ -3,7 +3,7 @@ const {
   closeConnection,
 } = require('../database/interactWithDB');
 
-const ROOM_LIMIT = 3;
+const ROOM_LIMIT = 3; // 1 is Deault, so in 3 it will be 4 people in room
 
 // SOme problem with creating the default room, it should already exist, no?
 //   const twelveHoursInMs = 43200; // 12 hours in seconds
@@ -13,7 +13,7 @@ const Game = {
   noVoteId: '1101602215212372179',
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
-  twelveHoursInMs: 40,
+  twelveHoursInMs: 43200,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',

@@ -23,18 +23,8 @@ async function execute(interaction) {
     return;
   }
   // Check if User is doing command from Private room or not
-  await interaction.reply('Showing Status: ');
+  await interaction.reply({ content: 'Showing Status: ', ephemeral: true });
   showVotes(interaction);
-
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

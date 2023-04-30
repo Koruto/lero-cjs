@@ -59,16 +59,6 @@ P.S. If the number of players are less than 2, Chat will be deleted immediately,
 
   // Send a confirmation message
   await interaction.followUp('Channels created successfully!');
-
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

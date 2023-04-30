@@ -58,16 +58,6 @@ async function execute(interaction) {
   const db = await openConnection();
   await db.run(`UPDATE Game SET night = 1 WHERE id = 1`);
   await closeConnection(db);
-
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.editReply(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

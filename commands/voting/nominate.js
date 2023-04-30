@@ -127,7 +127,7 @@ The town gathers in the centre for a very needed conversation. ${nominated} has 
   
 Type /vote for voting
   
-The vote will be open for 12 hours(currently 1 minute). You may take back your vote. Just type /unvote.
+The vote will be open for 12 hours. You may take back your vote. Just type /unvote.
 `;
 
   // Checking if previous nomination was succesful
@@ -154,16 +154,6 @@ Current majority is ${majority}`;
   nominationTimeTimer(interaction);
 
   // Pinging
-
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {

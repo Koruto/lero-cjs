@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Game, define_Variables } = require('../../util/constants');
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('delete_channel')
@@ -20,16 +20,6 @@ async function execute(interaction) {
   channels.forEach((channel) => {
     channel.delete();
   });
-
-  const sent = await interaction.followUp({
-    content: 'Pinging...',
-    fetchReply: true,
-  });
-  interaction.followUp(
-    `Roundtrip latency: ${
-      sent.createdTimestamp - interaction.createdTimestamp
-    }ms`
-  );
 }
 
 module.exports = {
