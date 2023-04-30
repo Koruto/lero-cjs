@@ -5,7 +5,7 @@ const {
 const { Game } = require('./constants');
 const { startTimer } = require('./startTimer');
 
-async function nominationTimeTimer(interaction) {
+async function nominationTimeTimer(client) {
   const db = await openConnection();
   // Check if User is doing command from Private room or not
   let message = '```';
@@ -14,15 +14,20 @@ async function nominationTimeTimer(interaction) {
     'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
   );
   if (!row) return;
-  if (interaction.createdTimestamp >= row.createdAt * 1000) return;
-  console.log('working');
-  startTimer(row.createdAt * 1000 - interaction.createdTimestamp)
+
+  const currentTime = new Date();
+  const currentTimeInMs = currentTime.getTime();
+
+  if (currentTimeInMs >= row.createdAt * 1000) return;
+
+  startTimer(row.createdAt * 1000 - currentTimeInMs)
     .then(async () => {
+      const guild = await client.guilds.fetch(Game.guildId);
       message += `${row.nominated}'s execution player list:\n`;
       for (column in row) {
         if (column[0] == '_' && row[column]) {
           const userId = column.slice(1);
-          const member = await interaction.guild.members.fetch(userId);
+          const member = await guild.members.fetch(userId);
           const voterName = await member.user.username;
           message += `- ${voterName}`;
           message += (await member.roles.cache.has(Game.noVoteId))
@@ -42,21 +47,12 @@ async function nominationTimeTimer(interaction) {
       message += '```';
       await closeConnection(db);
 
-      const channel = await interaction.guild.channels.cache.find(
+      const channels = await guild.channels.cache;
+      const channel = channels.find(
         (channel) => channel.name === 'town-square'
       );
 
       await channel.send(message);
-
-      const sent = await interaction.followUp({
-        content: 'Pinging...',
-        fetchReply: true,
-      });
-      interaction.followUp(
-        `Roundtrip latency: ${
-          sent.createdTimestamp - interaction.createdTimestamp
-        }ms`
-      );
     })
     .catch((error) => {
       // Code to  when promise rejects

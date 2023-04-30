@@ -10,7 +10,7 @@ const data = new SlashCommandBuilder()
   .setName('judge')
   .setDescription('Displays current Votes!');
 
-async function execute(interaction) {
+async function execute(interaction, client) {
   if (Game.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
@@ -53,7 +53,7 @@ Keira is up for execution.
     message = 'No Ongoing Nomination Currently';
     return;
   }
-  nominationTimeTimer(interaction);
+  nominationTimeTimer(client);
 
   // Pinging
   message += '```';

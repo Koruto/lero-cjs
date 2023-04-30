@@ -11,7 +11,7 @@ const data = new SlashCommandBuilder()
   .setName('unvote')
   .setDescription('Removes your vote from current player being nominated!');
 
-async function execute(interaction) {
+async function execute(interaction, client) {
   if (Game.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
@@ -60,7 +60,7 @@ async function execute(interaction) {
   // Pinging
 
   await closeConnection(db);
-  nominationTimeTimer(interaction);
+  nominationTimeTimer(client);
 
   const sent = await interaction.followUp({
     content: 'Pinging...',

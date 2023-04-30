@@ -19,7 +19,7 @@ const data = new SlashCommandBuilder()
       .setRequired(true)
   );
 
-async function execute(interaction) {
+async function execute(interaction, client) {
   if (Game.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
@@ -130,7 +130,7 @@ Current majority is ${majority}`;
 
   await closeConnection(db);
   await interaction.reply(nominationMessage);
-  nominationTimeTimer(interaction);
+  nominationTimeTimer(client);
 
   // Pinging
 

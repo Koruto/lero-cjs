@@ -19,6 +19,7 @@ let Game = {
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',
+  guildId: '1100058607099318354',
   viewChannelPermission: '0x0000000000000400',
   sendMessagePermission: '0x0000000000000800',
   validRooms: [
