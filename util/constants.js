@@ -16,6 +16,7 @@ let Game = {
   isNightTime: 0,
   playingId: '1101087801925181485',
   noVoteId: '1101602215212372179',
+  aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
   twelveHoursInMs: 60,
   townSquareRole: '1100061376694722693',
