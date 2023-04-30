@@ -92,10 +92,11 @@ async function execute(interaction) {
   const aliveMembers = await interaction.guild.members.cache.filter((member) =>
     member.roles.cache.has(Game.aliveId)
   ).size;
-
+  if (Error)
+    console.error();
   // Print out the members with the role
   const majority = Math.floor(aliveMembers / 2) + 1;
-  console.log(majority, aliveMembers);
+  console.log(`\nMajority: ${majority} \nTotal: ${aliveMembers}`);
 
   await db.run(
     `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority ,createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
