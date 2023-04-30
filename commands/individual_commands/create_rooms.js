@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Game } = require('../../util/constants');
+const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('create-rooms')

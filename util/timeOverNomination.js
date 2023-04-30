@@ -2,7 +2,8 @@ const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
-const { Game } = require('./constants');
+const { Game, define_Variables } = require('./constants');
+
 const { startTimer } = require('./startTimer');
 
 async function nominationTimeTimer(interaction) {
@@ -15,7 +16,7 @@ async function nominationTimeTimer(interaction) {
   );
   if (!row) return;
   if (interaction.createdTimestamp >= row.createdAt * 1000) return;
-  console.log('working');
+
   startTimer(row.createdAt * 1000 - interaction.createdTimestamp)
     .then(async () => {
       message += `${row.nominated}'s execution player list:\n`;
@@ -47,16 +48,6 @@ async function nominationTimeTimer(interaction) {
       );
 
       await channel.send(message);
-
-      const sent = await interaction.followUp({
-        content: 'Pinging...',
-        fetchReply: true,
-      });
-      interaction.followUp(
-        `Roundtrip latency: ${
-          sent.createdTimestamp - interaction.createdTimestamp
-        }ms`
-      );
     })
     .catch((error) => {
       // Code to  when promise rejects

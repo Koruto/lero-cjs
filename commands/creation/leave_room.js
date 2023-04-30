@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const disbandRoom = require('../../util/disband_room.js');
 
-const { Game, ROOM_LIMIT } = require('../../util/constants');
+const { Game, define_Variables, ROOM_LIMIT } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('leave-room')
@@ -9,8 +9,9 @@ const data = new SlashCommandBuilder()
 
 async function execute(interaction) {
   // Check if User is doing command from Private room or not
+  const timeOfDay = await define_Variables();
 
-  if (Game.isNightTime) {
+  if (timeOfDay.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
       ephemeral: true,

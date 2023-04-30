@@ -29,7 +29,7 @@ async function checkOngoing(interaction) {
   } catch (err) {
     console.error(err.message);
   }
-  closeConnection(db);
+  await closeConnection(db);
 }
 module.exports = {
   checkOngoing,

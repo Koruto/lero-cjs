@@ -2,8 +2,8 @@ const { SlashCommandBuilder } = require('discord.js');
 const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
-  .setName('delete_channel')
-  .setDescription('Deletes Channel!')
+  .setName('delete-archived-channel')
+  .setDescription('Deletes Channel in Archived Category!')
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
@@ -13,7 +13,7 @@ async function execute(interaction) {
   // Delete all Channel under it
   await interaction.guild.channels.fetch();
   const channels = await interaction.guild.channels.cache.filter(
-    (channel) => channel.parentId === Game.categoryId
+    (channel) => channel.parentId === Game.archivedCategoryId
   );
 
   channels.forEach((channel) => {

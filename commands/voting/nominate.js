@@ -4,8 +4,8 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
-const { Game } = require('../../util/constants');
 const { nominationTimeTimer } = require('../../util/timeOverNomination');
+const { Game, define_Variables } = require('../../util/constants');
 
 //   const Game.twelveHoursInMs = 43200; // 12 hours in seconds
 
@@ -19,8 +19,10 @@ const data = new SlashCommandBuilder()
       .setRequired(true)
   );
 
-async function execute(interaction) {
-  if (Game.isNightTime) {
+async function execute(interaction, client) {
+  const timeOfDay = await define_Variables();
+
+  if (timeOfDay.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
       ephemeral: true,
@@ -78,7 +80,7 @@ async function execute(interaction) {
 
   const alreadyNominated = await db.get(
     `SELECT COUNT(*) as count FROM Nominations WHERE day = ? AND nominee = ?`,
-    [Game.currentDay, nominee]
+    [timeOfDay.currentDay, nominee]
   );
   // if (alreadyNominated.count) {
   //   await interaction.reply(
@@ -96,11 +98,18 @@ async function execute(interaction) {
     console.error();
   // Print out the members with the role
   const majority = Math.floor(aliveMembers / 2) + 1;
-  console.log(`\nMajority: ${majority} \nTotal: ${aliveMembers}`);
+  console.log(majority, aliveMembers);
 
   await db.run(
     `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority ,createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
-    [Game.currentDay, nominated, nominee, 1, majority, nominationFinishingTime]
+    [
+      timeOfDay.currentDay,
+      nominated,
+      nominee,
+      1,
+      majority,
+      nominationFinishingTime,
+    ]
   );
   let nominationMessage = `
 The town gathers in the centre for a very needed conversation. ${nominated} is placed in the centre for everyone to see. It is time to judge their character.
@@ -114,7 +123,7 @@ The vote will be open for 12 hours(currently 1 minute). You may take back your v
 
   // Checking if previous nomination was succesful
   const newMajority = await db.get(
-    `SELECT * FROM Nominations WHERE day = ${Game.currentDay} AND votes >= majority ORDER BY votes DESC LIMIT 1`
+    `SELECT * FROM Nominations WHERE day = ${timeOfDay.currentDay} AND votes >= majority ORDER BY votes DESC LIMIT 1`
   );
   // Check votes column
 

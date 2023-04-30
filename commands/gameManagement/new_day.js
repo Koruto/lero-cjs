@@ -3,7 +3,6 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('new-day')
@@ -25,13 +24,12 @@ async function execute(interaction) {
   });
 
   // Send a confirmation message
-  await interaction.followUp('Channels created successfully!');
 
   const sent = await interaction.followUp({
     content: 'Pinging...',
     fetchReply: true,
   });
-  interaction.editReply(
+  interaction.followUp(
     `Roundtrip latency: ${
       sent.createdTimestamp - interaction.createdTimestamp
     }ms`

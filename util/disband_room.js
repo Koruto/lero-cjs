@@ -1,4 +1,4 @@
-const { Game } = require('./constants');
+const { Game, define_Variables } = require('./constants');
 
 async function disbandRoom(interaction) {
   const channelId = interaction.channel.id;

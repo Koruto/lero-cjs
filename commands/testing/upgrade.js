@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 const fs = require('fs').promises;
 const { checkOngoing } = require('../../util/timeFunctions');
-const { Game } = require('../../util/constants');
+const { Game, define_Variables } = require('../../util/constants');
 const { startTimer } = require('../../util/startTimer');
 
 const playingId = '1101087801925181485';
