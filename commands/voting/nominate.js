@@ -98,7 +98,7 @@ async function execute(interaction, client) {
     console.error();
   // Print out the members with the role
   const majority = Math.floor(aliveMembers / 2) + 1;
-  console.log(majority, aliveMembers);
+  console.log(`Majority: ${majority}\n Total:${aliveMembers}`);
 
   await db.run(
     `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority ,createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
