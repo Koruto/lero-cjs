@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { sleep } = require('system-sleep');
+const  sleep = require('system-sleep');
 const execSync = require('child_process').execSync;
 
 module.exports = {
