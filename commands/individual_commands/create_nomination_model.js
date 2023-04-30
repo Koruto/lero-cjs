@@ -22,7 +22,7 @@ async function execute(interaction) {
 
   define_Nomination(playingMembers);
   define_Game();
-  // define_History();  To be added later on
+  define_History();
 
   await interaction.reply('Reached');
   // Pinging

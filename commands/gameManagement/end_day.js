@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, define_Variables } = require('../../util/constants');
+const { Game } = require('../../util/constants');
 const { closeRooms } = require('../../util/close_rooms');
 
 const data = new SlashCommandBuilder()

@@ -3,7 +3,6 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { checkOngoing } = require('../../util/timeFunctions');
 const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
@@ -25,7 +24,6 @@ async function execute(interaction) {
     });
     return;
   }
-  const db = await openConnection();
   const userHistory = await interaction.options.getUser('user').username;
 
   if (!interaction.member.roles.cache.has(Game.playingId)) {
@@ -40,6 +38,7 @@ async function execute(interaction) {
     return;
   }
 
+  const db = await openConnection();
   let query = `SELECT * FROM History WHERE `;
   for (let i = 1; i <= Game.ROOM_LIMIT; i++) {
     query += `user${i} = '${userHistory}' OR `;

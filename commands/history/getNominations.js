@@ -3,8 +3,6 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { checkOngoing } = require('../../util/timeFunctions');
-const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('get-nominations')

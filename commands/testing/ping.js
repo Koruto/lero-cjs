@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { nominationTimeTimer } = require('../../util/timeOverNomination');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,5 +11,6 @@ module.exports = {
     message.channel.send(
       `Response Time: ${Date.now() - interaction.createdTimestamp}ms`
     );
+    nominationTimeTimer(interaction);
   },
 };

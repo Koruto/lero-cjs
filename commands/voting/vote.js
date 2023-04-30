@@ -4,7 +4,7 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
-const { nominationTimeTimer } = require('../../util/timeOverNomination');
+const { showVotes } = require('../../util/showVotes');
 
 const { Game, define_Variables } = require('../../util/constants');
 
@@ -12,7 +12,14 @@ const data = new SlashCommandBuilder()
   .setName('vote')
   .setDescription('Vote for the current player being nominated!');
 
-async function execute(interaction, client) {
+async function execute(interaction) {
+  if (interaction.channel.name !== 'town-square') {
+    await interaction.reply({
+      content: `Use command from 'town-square'`,
+      ephemeral: true,
+    });
+    return;
+  }
   const timeOfDay = await define_Variables();
   if (timeOfDay.isNightTime) {
     await interaction.reply({
@@ -41,6 +48,11 @@ async function execute(interaction, client) {
       'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
     );
     if (row && row.onGoing) {
+      const userPropertyName = '_' + interaction.user.id;
+      if (row[userPropertyName]) {
+        await interaction.reply(`You've already voted`);
+        return;
+      }
       await db.run(
         `UPDATE Nominations SET _${interaction.user.id} = ?, votes = votes + 1 WHERE id = ?`,
         ['1', row.id]
@@ -57,12 +69,13 @@ async function execute(interaction, client) {
     }
   } catch (err) {
     console.error(err.message);
+  } finally {
+    await closeConnection(db);
   }
 
   // Pinging
 
-  await closeConnection(db);
-  nominationTimeTimer(interaction);
+  showVotes(interaction);
 
   const sent = await interaction.followUp({
     content: 'Pinging...',

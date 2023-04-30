@@ -13,7 +13,8 @@ async function execute(interaction) {
   // Delete all Channel under it
   await interaction.guild.channels.fetch();
   const channels = await interaction.guild.channels.cache.filter(
-    (channel) => channel.parentId === Game.categoryId
+    (channel) =>
+      channel.parentId === Game.categoryId && channel.name !== 'town-square'
   );
 
   channels.forEach((channel) => {

@@ -77,6 +77,7 @@ async function execute(interaction) {
     });
     return;
   }
+
   await interaction.reply(`Request Received! Users to be added: ${target}`);
 
   // Array of available rooms

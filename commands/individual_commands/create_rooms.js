@@ -1,9 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Game, define_Variables } = require('../../util/constants');
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('create-rooms')
-  .setDescription('Creates the 10 Roles for Chanel, Only for admin dont use it')
+  .setDescription('Creates the 10 Rooms for Chanel, Only for admin dont use it')
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {

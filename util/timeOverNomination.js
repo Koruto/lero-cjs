@@ -2,7 +2,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
-const { Game, define_Variables } = require('./constants');
+const { Game } = require('./constants');
 
 const { startTimer } = require('./startTimer');
 

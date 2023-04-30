@@ -1,4 +1,4 @@
-const { Game, define_Variables } = require('./constants');
+const { Game } = require('./constants');
 
 async function closeRooms(channel) {
   const newChannel = await channel.clone({

@@ -6,6 +6,7 @@ const {
 const { checkOngoing } = require('../../util/timeFunctions');
 const { nominationTimeTimer } = require('../../util/timeOverNomination');
 const { Game, define_Variables } = require('../../util/constants');
+const { sendNominationWarning } = require('../../util/sendNominationWarning');
 
 //   const Game.twelveHoursInMs = 43200; // 12 hours in seconds
 
@@ -19,7 +20,15 @@ const data = new SlashCommandBuilder()
       .setRequired(true)
   );
 
-async function execute(interaction, client) {
+async function execute(interaction) {
+  if (interaction.channel.name !== 'town-square') {
+    await interaction.reply({
+      content: `Use command from Town Square`,
+      ephemeral: true,
+    });
+    return;
+  }
+
   const timeOfDay = await define_Variables();
 
   if (timeOfDay.isNightTime) {
@@ -33,7 +42,6 @@ async function execute(interaction, client) {
   const nominationFinishingTime =
     Math.floor(interaction.createdTimestamp / 1000) + Game.twelveHoursInMs;
 
-  const db = await openConnection();
   const nominated = await interaction.options.getUser('user').username;
   const nominee = await interaction.user.username;
   // TODO Also check day,
@@ -59,65 +67,67 @@ async function execute(interaction, client) {
     return;
   }
 
-  let message;
   await checkOngoing(interaction);
 
+  const db = await openConnection();
   try {
     const row = await db.get(
       'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
     );
     if (row.onGoing) {
-      message = `Nomination already onGoing, wait <t:${row.createdAt}:R> for it to finish`;
+      await interaction.reply(
+        `Nomination already onGoing, try again <t:${row.createdAt}:R>`
+      );
+      await closeConnection(db);
+      return;
     }
   } catch (err) {
     console.error(err.message);
-  }
-
-  if (message) {
-    await interaction.reply(message);
-    return;
   }
 
   const alreadyNominated = await db.get(
     `SELECT COUNT(*) as count FROM Nominations WHERE day = ? AND nominee = ?`,
     [timeOfDay.currentDay, nominee]
   );
-  // if (alreadyNominated.count) {
-  //   await interaction.reply(
-  //     'You already nominated for the day, cannot nominate again'
-  //   );
-  //   return;
-  // }
+
+  if (alreadyNominated.count) {
+    await interaction.reply(
+      'You already nominated for the day, cannot nominate again'
+    );
+    return;
+  }
 
   // Calculate Majority
   await interaction.guild.members.fetch();
   const aliveMembers = await interaction.guild.members.cache.filter((member) =>
     member.roles.cache.has(Game.aliveId)
   ).size;
-  if (Error)
-    console.error();
+  if (Error) console.error();
   // Print out the members with the role
   const majority = Math.floor(aliveMembers / 2) + 1;
   console.log(`Majority: ${majority}\n Total:${aliveMembers}`);
   await db.run(
-    `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority ,createdAt) VALUES (?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority,votes ,createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)`,
     [
       timeOfDay.currentDay,
       nominated,
       nominee,
       1,
       majority,
+      1,
       nominationFinishingTime,
     ]
   );
-  let nominationMessage = `
-The town gathers in the centre for a very needed conversation. ${nominated} is placed in the centre for everyone to see. It is time to judge their character.
+  let nominationMessage = '';
 
-@alive and @dead if anyone would like for the execution go forward please vote with:
+  nominationMessage += `
+The town gathers in the centre for a very needed conversation. ${nominated} has been chosen by ${nominee} and is placed in the centre for everyone to see. It is time to judge their character.
+
+<@&${Game.aliveId}> and <@&${Game.deadId}> if anyone would like for the execution go forward please vote with:
   
 Type /vote for voting
   
-The vote will be open for 12 hours(currently 1 minute). You may take back your vote. Just ping me in the centre and tell me so.
+The vote will be open for 12 hours(currently 1 minute). You may take back your vote. Just type /unvote.
 `;
 
   // Checking if previous nomination was succesful
@@ -138,7 +148,9 @@ One player is already nominated, to stop that get ${
 Current majority is ${majority}`;
 
   await closeConnection(db);
-  await interaction.reply(nominationMessage);
+  await interaction.reply({ content: `Nomination Received`, ephemeral: true });
+  await interaction.channel.send(nominationMessage);
+  sendNominationWarning(interaction, nominated, nominee);
   nominationTimeTimer(interaction);
 
   // Pinging

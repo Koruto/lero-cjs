@@ -4,14 +4,21 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/timeFunctions');
-const { nominationTimeTimer } = require('../../util/timeOverNomination');
+const { showVotes } = require('../../util/showVotes');
 const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('unvote')
   .setDescription('Removes your vote from current player being nominated!');
 
-async function execute(interaction, client) {
+async function execute(interaction) {
+  if (interaction.channel.name !== 'town-square') {
+    await interaction.reply({
+      content: `Use command from 'town-square'`,
+      ephemeral: true,
+    });
+    return;
+  }
   const timeOfDay = await define_Variables();
   if (timeOfDay.isNightTime) {
     await interaction.reply({
@@ -39,8 +46,9 @@ async function execute(interaction, client) {
         await interaction.reply('Vote before unvoting');
         return;
       }
+      console.log('here');
       await db.run(
-        `UPDATE Nominations SET _${interaction.user.id} = ? WHERE id = ?`,
+        `UPDATE Nominations SET _${interaction.user.id}= ? , votes = votes - 1 WHERE id = ?`,
         ['0', row.id]
       );
       await interaction.reply('Vote Removed');
@@ -56,12 +64,12 @@ async function execute(interaction, client) {
     }
   } catch (err) {
     console.error(err.message);
+  } finally {
+    await closeConnection(db);
   }
 
   // Pinging
-
-  await closeConnection(db);
-  nominationTimeTimer(interaction);
+  showVotes(interaction);
 
   const sent = await interaction.followUp({
     content: 'Pinging...',
