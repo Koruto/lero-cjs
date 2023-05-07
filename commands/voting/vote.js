@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { checkOngoing } = require('../../util/timeFunctions');
+const { checkOngoing } = require('../../util/checkOngoing');
 const { showVotes } = require('../../util/showVotes');
 
 const { Game, define_Variables } = require('../../util/constants');

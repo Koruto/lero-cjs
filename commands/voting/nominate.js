@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { checkOngoing } = require('../../util/timeFunctions');
+const { checkOngoing } = require('../../util/checkOngoing');
 const { nominationTimeTimer } = require('../../util/timeOverNomination');
 const { Game, define_Variables } = require('../../util/constants');
 const { sendNominationWarning } = require('../../util/sendNominationWarning');

@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const disbandRoom = require('../../util/disband_room.js');
 
-const { Game, define_Variables, ROOM_LIMIT } = require('../../util/constants');
+const { Game, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('leave-room')
@@ -63,11 +63,14 @@ async function execute(interaction) {
     if (value._roles.includes(role.id)) count++;
   }
 
-  // TODO Better this Loop , so that it doesnt loop for each member again
-  if (count < ROOM_LIMIT) {
+  // TODO Better this Loop , so that it doesnt loop for each member again, also dont loop players aside from playing
+  // TODO bot gives them role too
+  if (count <= 2) {
     for (const [key, value] of channelMembers.entries()) {
-      value.roles.remove(role.id);
-      value.roles.add(Game.townSquareRole);
+      if (value._roles.includes(role.id)) {
+        value.roles.remove(role.id);
+        value.roles.add(Game.townSquareRole);
+      }
     }
     disbandRoom(interaction);
   } else {

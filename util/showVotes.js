@@ -3,7 +3,7 @@ const {
   closeConnection,
 } = require('../database/interactWithDB');
 const { nominationTimeTimer } = require('./timeOverNomination');
-const { checkOngoing } = require('./timeFunctions');
+const { checkOngoing } = require('./checkOngoing');
 const { Game } = require('./constants');
 
 async function showVotes(interaction) {

@@ -1,9 +1,78 @@
+// const {
+//   openConnection,
+//   closeConnection,
+// } = require('../database/interactWithDB');
+
+// const ROOM_LIMIT = 3;
+
+// // Some problem with creating the default room, it should already exist, no?
+// //   const twelveHoursInMs = 43200; // 12 hours in seconds
+// // const twelveHoursInMs = 60; // 1 minute in seconds
+// const Game = {
+//   playingId: '1082346141003296871',
+//   noVoteId: '1078003254807506954',
+//   aliveId: '1074139812078026822',
+//   deadId: '1074139806839349368',
+//   twelveHoursInMs: 43200,
+//   townSquareRole: '1075403559006388334',
+//   categoryId: '1074082117589401730',
+//   archivedCategoryId: '1101894036824006759',
+//   guildId: '1074042138939113562',
+//   viewChannelPermission: '0x0000000000000400',
+//   sendMessagePermission: '0x0000000000000800',
+//   validRooms: [
+//     'blacksmith-shop_',
+//     'infirmary_',
+//     'tavern_',
+//     'main-garden_',
+//     'edge-of-town_',
+//     'train-station_',
+//     'alley_',
+//     'inn_',
+//     'sheriff-station_',
+//     'carpentry-shop_',
+//   ],
+//   placeRoles: {
+//     'Blacksmith Shop': '1075404429454491699',
+//     Infirmary: '1075404279008989294',
+//     Tavern: '1075404253268557885',
+//     'Main Garden': '1075404362312065044',
+//     'Edge Of Town': '1084233672661663774',
+//     'Train Station': '1093832536364437625',
+//     Alley: '1075403664245669969',
+//     Inn: '1075404309824548884',
+//     'Sheriff Station': '1075404331425218591',
+//     'Carpentry Shop': '1075404399662350336',
+//     'Town Square': '1075403559006388334',
+//   },
+// };
+
+// async function define_Variables() {
+//   let timeOfDay = {
+//     currentDay: 1,
+//     isNightTime: 0,
+//   };
+
+//   const db = await openConnection();
+//   const variables = await db.get(`SELECT * FROM Game WHERE id = 1`);
+//   timeOfDay.currentDay = variables.day;
+//   timeOfDay.isNightTime = variables.night;
+//   await closeConnection(db);
+//   return timeOfDay;
+// }
+
+// module.exports = {
+//   Game,
+//   ROOM_LIMIT,
+//   define_Variables,
+// };
+
 const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
 
-const ROOM_LIMIT = 3; // 1 is Deault, so in 3 it will be 4 people in room
+const ROOM_LIMIT = 3; // 1 is Default, so in 3 it will be 4 people in room
 
 // SOme problem with creating the default room, it should already exist, no?
 //   const twelveHoursInMs = 43200; // 12 hours in seconds

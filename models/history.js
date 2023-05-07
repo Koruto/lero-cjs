@@ -2,13 +2,12 @@ const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
-const { ROOM_LIMIT } = require('../util/constants');
 
 async function define_History() {
   const db = await openConnection();
 
   let userColumns = '';
-  for (let i = 1; i <= ROOM_LIMIT; i++) {
+  for (let i = 1; i <= 3; i++) {
     userColumns += `, user${i} TEXT DEFAULT none `;
   }
 

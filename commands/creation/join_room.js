@@ -15,7 +15,7 @@ const data = new SlashCommandBuilder()
       .setRequired(true)
   );
 
-for (let i = 1; i <= ROOM_LIMIT; i++) {
+for (let i = 1; i <= ROOM_LIMIT - 2; i++) {
   data.addUserOption((option) =>
     option.setName(`user${i}`).setDescription(`User ${i}`)
   );
@@ -56,18 +56,24 @@ async function execute(interaction) {
   let target = [interactionUser.user];
   target.push(await interaction.options.getUser('user'));
 
-  for (let i = 1; i <= ROOM_LIMIT; i++) {
+  for (let i = 1; i <= ROOM_LIMIT - 2; i++) {
     if (await interaction.options.getUser(`user${i}`))
       target.push(await interaction.options.getUser(`user${i}`));
   }
 
-  let playersNotAvailable;
+  let targetNamesArray = new Set();
+  let playersNotAvailable = false;
+
   // Checking players availablity
-  target.forEach(async (user) => {
+  // console.log('Before Loop', target);
+  for (const user of target) {
     const member = await interaction.guild.members.cache.get(user.id);
-    if (!member.roles.cache.has(Game.townSquareRole))
-      playersNotAvailable = true;
-  });
+    const haveTownSquareRole = await member.roles.cache.has(
+      Game.townSquareRole
+    );
+    targetNamesArray.add(user.username);
+    if (!haveTownSquareRole) playersNotAvailable = true;
+  }
 
   if (playersNotAvailable) {
     await interaction.reply({
@@ -76,12 +82,21 @@ async function execute(interaction) {
     });
     return;
   }
+  // Check if more than one user
+  if (targetNamesArray.size == 1) {
+    await interaction.reply({
+      content: `Don't be a loner, who talks to himself, Pui!`,
+      ephemeral: true,
+    });
+    return;
+  }
+
   let targetNames = '';
-  target.forEach(async (user, index) => {
-    targetNames += user.username;
-    if (index < target.length - 2) {
+  targetNamesArray.forEach((user, index) => {
+    targetNames += user;
+    if (index < targetNamesArray.size - 2) {
       targetNames += ', ';
-    } else if (index == target.length - 2) {
+    } else if (index == targetNamesArray.size - 2) {
       targetNames += ', and ';
     }
   });
