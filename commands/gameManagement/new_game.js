@@ -21,19 +21,33 @@ async function execute(interaction) {
       name: place,
     });
     await channel.setParent(Game.categoryId);
-    await channel.edit({
-      name: place,
-      permissionOverwrites: [
-        {
-          id: Game.placeRoles[place],
-          allow: Game.viewChannelPermission,
-        },
-        {
-          id: interaction.guild.id,
-          deny: Game.viewChannelPermission,
-        },
-      ],
-    });
+    if (place == 'Town Square') {
+      await channel.edit({
+        permissionOverwrites: [
+          {
+            id: Game.placeRoles[place],
+            allow: Game.viewChannelPermission,
+          },
+          {
+            id: interaction.guild.id,
+            deny: [Game.sendMessagePermission, Game.viewChannelPermission],
+          },
+        ],
+      });
+    } else {
+      await channel.edit({
+        permissionOverwrites: [
+          {
+            id: Game.placeRoles[place],
+            allow: Game.viewChannelPermission,
+          },
+          {
+            id: interaction.guild.id,
+            deny: Game.viewChannelPermission,
+          },
+        ],
+      });
+    }
     if (place !== 'Town Square') {
       await channel.send(`
   Welcome to a private room!

@@ -47,7 +47,7 @@ async function execute(interaction) {
         await interaction.editReply('Vote before unvoting');
         return;
       }
-      console.log('here');
+
       await db.run(
         `UPDATE Nominations SET _${interaction.user.id}= ? , votes = votes - 1 WHERE id = ?`,
         ['0', row.id]

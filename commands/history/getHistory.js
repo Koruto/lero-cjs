@@ -33,7 +33,6 @@ async function execute(interaction) {
   const dayHistory =
     (await interaction.options.getInteger('day')) || timeOfDay.currentDay;
 
-  console.log(dayHistory);
   if (dayHistory > timeOfDay.currentDay) {
     await interaction.reply(`This dude wants future Info! smh`);
     return;
@@ -53,12 +52,12 @@ async function execute(interaction) {
   await interaction.reply(`History as follows:`);
   const db = await openConnection();
   let query = `SELECT * FROM History WHERE `;
-  console.log(ROOM_LIMIT);
+
   for (let i = 1; i <= ROOM_LIMIT; i++) {
     query += `user${i} = '${userHistory}' OR `;
   }
   query = query.slice(0, -3);
-  console.log(query);
+
   let resultsByDay = {};
   let historyMessage = '```';
   try {

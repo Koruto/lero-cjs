@@ -21,6 +21,7 @@ async function execute(interaction) {
   const townSquareChannel = await interaction.guild.channels.cache.find(
     (ch) => ch.name === 'town-square'
   );
+
   await townSquareChannel.permissionOverwrites.edit(interaction.guild.id, {
     SendMessages: true,
   });
