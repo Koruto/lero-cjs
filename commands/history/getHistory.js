@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, define_Variables } = require('../../util/constants');
+const { Game, define_Variables, ROOM_LIMIT } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('history')
@@ -11,12 +11,17 @@ const data = new SlashCommandBuilder()
   .addUserOption((option) =>
     option
       .setName('user')
-      .setDescription('User to be Nominated')
+      .setDescription('Specify User whos history needed')
       .setRequired(true)
+  )
+  .addIntegerOption((option) =>
+    option
+      .setName('day')
+      .setDescription('Results history of specific day, Default is current Day')
   );
 
 async function execute(interaction) {
-  const timeOfDay = define_Variables();
+  const timeOfDay = await define_Variables();
   if (timeOfDay.isNightTime) {
     await interaction.reply({
       content: 'Cannot use this command at night',
@@ -25,6 +30,14 @@ async function execute(interaction) {
     return;
   }
   const userHistory = await interaction.options.getUser('user').username;
+  const dayHistory =
+    (await interaction.options.getInteger('day')) || timeOfDay.currentDay;
+
+  console.log(dayHistory);
+  if (dayHistory > timeOfDay.currentDay) {
+    await interaction.reply(`This dude wants future Info! smh`);
+    return;
+  }
 
   if (!interaction.member.roles.cache.has(Game.playingId)) {
     await interaction.reply('Join the game to use its feature :)');
@@ -37,14 +50,15 @@ async function execute(interaction) {
     await interaction.reply('History only for playing players');
     return;
   }
-
+  await interaction.reply(`History as follows:`);
   const db = await openConnection();
   let query = `SELECT * FROM History WHERE `;
-  for (let i = 1; i <= Game.ROOM_LIMIT; i++) {
+  console.log(ROOM_LIMIT);
+  for (let i = 1; i <= ROOM_LIMIT; i++) {
     query += `user${i} = '${userHistory}' OR `;
   }
   query = query.slice(0, -3);
-
+  console.log(query);
   let resultsByDay = {};
   let historyMessage = '```';
   try {
@@ -56,6 +70,7 @@ async function execute(interaction) {
       const resultString = [row.user1, row.user2, row.user3]
         .filter((user) => user !== userHistory && user !== 'none') // Remove the searched user
         .join(' and ');
+      if (!resultString) continue;
       if (!resultsByDay[day]) {
         resultsByDay[day] = [`${resultString}`];
       } else {
@@ -64,19 +79,28 @@ async function execute(interaction) {
     }
 
     // Print the results by day
-    for (const [day, results] of Object.entries(resultsByDay)) {
-      historyMessage += `Day ${day}:\n`;
-      historyMessage += results.join('\n');
+    if (dayHistory) {
+      historyMessage += `\nDay ${dayHistory}:\n`;
+
+      historyMessage +=
+        resultsByDay[dayHistory]?.join('\n') ??
+        'Town-Square is being introverted';
     }
+    // for (const [day, results] of Object.entries(resultsByDay)) {
+    //   historyMessage += `\nDay ${day}:\n`;
+    //   historyMessage += results.join('\n');
+    // }
+
     historyMessage += '```';
   } catch (err) {
     console.error(err.message);
+  } finally {
+    await closeConnection(db);
   }
 
-  await closeConnection(db);
-
   // Pinging
-  await interaction.reply(`History as follows: ${historyMessage}`);
+
+  await interaction.followUp(`${historyMessage}`);
 }
 
 module.exports = {

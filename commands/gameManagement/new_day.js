@@ -10,16 +10,18 @@ const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
+  const endDayTime = Math.floor(interaction.createdTimestamp / 1000) + 1_72_800;
   await interaction.reply(`Starting new day`);
   const db = await openConnection();
-  await db.run(`UPDATE Game SET day = day + 1 WHERE id = 1`);
-  await db.run(`UPDATE Game SET night = 0 WHERE id = 1`);
+  await db.run(
+    ` UPDATE Game SET day = day + 1, night = 0, closingAt = ${endDayTime} WHERE id = 1`
+  );
   await closeConnection(db);
 
-  const channel = await interaction.guild.channels.cache.find(
+  const townSquareChannel = await interaction.guild.channels.cache.find(
     (ch) => ch.name === 'town-square'
   );
-  await channel.permissionOverwrites.edit(interaction.guild.id, {
+  await townSquareChannel.permissionOverwrites.edit(interaction.guild.id, {
     SendMessages: true,
   });
 

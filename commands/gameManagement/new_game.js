@@ -12,6 +12,7 @@ const data = new SlashCommandBuilder()
 async function execute(interaction) {
   await interaction.reply(`Command Reached! Starting new game`);
   // Assuming you have already fetched the guild and created the roles
+
   // Create channel
   for (const place in Game.placeRoles) {
     // Create the channel
@@ -35,13 +36,13 @@ async function execute(interaction) {
     });
     if (place !== 'Town Square') {
       await channel.send(`
-Welcome to a private room!
-    
-Use this room as you'd like.
-No one else will see this conversation without someone's permission, so don't worry. All conversations are saved.
-      
-To leave,  use /leave-room
-P.S. If the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`);
+  Welcome to a private room!
+
+  Use this room as you'd like.
+  No one else will see this conversation without someone's permission, so don't worry. All conversations are saved.
+
+  To leave,  use /leave-room
+  P.S. If the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`);
     }
 
     console.log(`Created channel ${channel.name} with ID ${channel.id}`);
@@ -49,16 +50,27 @@ P.S. If the number of players are less than 2, Chat will be deleted immediately,
 
   // Defines Database
   await interaction.guild.members.fetch();
+
+  // Giving Roles Automatically
+
+  const pendingMembers = await interaction.guild.members.cache.filter(
+    (member) => member.roles.cache.has(Game.pendingId)
+  );
+  for (const member of pendingMembers.values()) {
+    await member.roles.add([Game.playingId, Game.aliveId, Game.townSquareRole]);
+    await member.roles.remove(Game.pendingId);
+  }
+
   const playingMembers = await interaction.guild.members.cache
     .filter((member) => member.roles.cache.has(Game.playingId))
     .map((member) => member.user.id);
 
   define_Nomination(playingMembers);
-  define_Game();
+  define_Game(interaction.createdTimestamp);
   define_History(); //To be added later on
 
   // Send a confirmation message
-  await interaction.followUp('Channels created successfully!');
+  await interaction.followUp('Game Initializing complete!');
 }
 
 module.exports = {

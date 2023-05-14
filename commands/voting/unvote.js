@@ -27,23 +27,24 @@ async function execute(interaction) {
     });
     return;
   }
-  await checkOngoing(interaction);
 
   if (!interaction.member.roles.cache.has(Game.playingId)) {
     await interaction.reply('Join the game to use its feature :)');
     return;
   }
 
+  await interaction.deferReply('');
+  await checkOngoing(interaction);
   const db = await openConnection();
 
   try {
     const row = await db.get(
-      'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
+      'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
     );
     if (row && row.onGoing) {
       const userPropertyName = '_' + interaction.user.id;
       if (!row[userPropertyName]) {
-        await interaction.reply('Vote before unvoting');
+        await interaction.editReply('Vote before unvoting');
         return;
       }
       console.log('here');
@@ -51,7 +52,7 @@ async function execute(interaction) {
         `UPDATE Nominations SET _${interaction.user.id}= ? , votes = votes - 1 WHERE id = ?`,
         ['0', row.id]
       );
-      await interaction.reply('Vote Removed');
+      await interaction.editReply('Vote Removed');
       if (interaction.member.roles.cache.has(Game.noVoteId)) {
         await interaction.followUp('You regained your dead vote!');
 
@@ -60,7 +61,7 @@ async function execute(interaction) {
 
       console.log(`Row updated: ${row.id}`);
     } else {
-      await interaction.reply('No ongoing Nomination');
+      await interaction.editReply('No ongoing Nomination');
     }
   } catch (err) {
     console.error(err.message);

@@ -12,16 +12,16 @@ async function checkOngoing(interaction) {
   const db = await openConnection();
   try {
     const row = await db.get(
-      'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
+      'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
     );
     if (row.onGoing) {
       const value = await compareTime(
         interaction.createdTimestamp,
-        row.createdAt
+        row.closingAt
       );
       if (!value) {
         await db.run(
-          `UPDATE Nominations SET onGoing = 0 WHERE createdAt = ${row.createdAt};
+          `UPDATE Nominations SET onGoing = 0 WHERE closingAt = ${row.closingAt};
           `
         );
       }

@@ -2,7 +2,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../database/interactWithDB');
-const { nominationTimeTimer } = require('./timeOverNomination');
+const { nominationTimeTimer } = require('./nominationTimeTimer');
 const { checkOngoing } = require('./checkOngoing');
 const { Game } = require('./constants');
 
@@ -12,7 +12,7 @@ async function showVotes(interaction) {
   const db = await openConnection();
   try {
     const row = await db.get(
-      'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
+      'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
     );
 
     if (row && row.onGoing) {

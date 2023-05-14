@@ -28,7 +28,6 @@ async function execute(interaction) {
     });
     return;
   }
-  await checkOngoing(interaction);
 
   if (interaction.member.roles.cache.has(Game.noVoteId)) {
     await interaction.reply('You`ve already used your one Dead vote.');
@@ -39,25 +38,27 @@ async function execute(interaction) {
     return;
   }
 
+  await interaction.deferReply('');
+  await checkOngoing(interaction);
   const db = await openConnection();
 
   // TODO   prevent dual voting, create unvote command, remove no vote role, if they voted before or not
 
   try {
     const row = await db.get(
-      'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
+      'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
     );
     if (row && row.onGoing) {
       const userPropertyName = '_' + interaction.user.id;
       if (row[userPropertyName]) {
-        await interaction.reply(`You've already voted`);
+        await interaction.editReply(`You've already voted`);
         return;
       }
       await db.run(
         `UPDATE Nominations SET _${interaction.user.id} = ?, votes = votes + 1 WHERE id = ?`,
         ['1', row.id]
       );
-      await interaction.reply('Vote Confirmed');
+      await interaction.editReply('Vote Confirmed');
       if (interaction.member.roles.cache.has(Game.deadId)) {
         await interaction.followUp('Your one dead vote is used up!');
         interaction.member.roles.add(Game.noVoteId);
@@ -65,7 +66,7 @@ async function execute(interaction) {
 
       console.log(`Row updated: ${row.id}`);
     } else {
-      await interaction.reply('No ongoing Nomination');
+      await interaction.editReply('No ongoing Nomination');
     }
   } catch (err) {
     console.error(err.message);

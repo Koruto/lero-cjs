@@ -12,12 +12,12 @@ async function nominationTimeTimer(interaction) {
   let message = '```';
 
   const row = await db.get(
-    'SELECT * FROM Nominations ORDER BY createdAt DESC LIMIT 1'
+    'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
   );
   if (!row) return;
-  if (interaction.createdTimestamp >= row.createdAt * 1000) return;
+  if (interaction.createdTimestamp >= row.closingAt * 1000) return;
 
-  startTimer(row.createdAt * 1000 - interaction.createdTimestamp)
+  startTimer(row.closingAt * 1000 - interaction.createdTimestamp)
     .then(async () => {
       message += `${row.nominated}'s execution player list:\n`;
       for (column in row) {

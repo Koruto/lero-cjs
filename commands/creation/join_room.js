@@ -61,7 +61,7 @@ async function execute(interaction) {
       target.push(await interaction.options.getUser(`user${i}`));
   }
 
-  let targetNamesArray = new Set();
+  let targetNamesSet = new Set();
   let playersNotAvailable = false;
 
   // Checking players availablity
@@ -71,7 +71,7 @@ async function execute(interaction) {
     const haveTownSquareRole = await member.roles.cache.has(
       Game.townSquareRole
     );
-    targetNamesArray.add(user.username);
+    targetNamesSet.add(user.username);
     if (!haveTownSquareRole) playersNotAvailable = true;
   }
 
@@ -83,7 +83,7 @@ async function execute(interaction) {
     return;
   }
   // Check if more than one user
-  if (targetNamesArray.size == 1) {
+  if (targetNamesSet.size == 1) {
     await interaction.reply({
       content: `Don't be a loner, who talks to himself, Pui!`,
       ephemeral: true,
@@ -92,12 +92,13 @@ async function execute(interaction) {
   }
 
   let targetNames = '';
+  const targetNamesArray = Array.from(targetNamesSet);
   targetNamesArray.forEach((user, index) => {
     targetNames += user;
-    if (index < targetNamesArray.size - 2) {
+    if (index < targetNamesArray.length - 2) {
       targetNames += ', ';
-    } else if (index == targetNamesArray.size - 2) {
-      targetNames += ', and ';
+    } else if (index == targetNamesArray.length - 2) {
+      targetNames += ' and ';
     }
   });
   await interaction.reply(

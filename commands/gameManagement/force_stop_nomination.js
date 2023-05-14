@@ -20,7 +20,7 @@ async function execute(interaction) {
 
   const db = await openConnection();
 
-  await db.run(`UPDATE Nominations SET createdAt = 0 WHERE id = ?`, [
+  await db.run(`UPDATE Nominations SET closingAt = 0 WHERE id = ?`, [
     interaction.options.getString('id'),
   ]);
   await interaction.reply('Force Stopped Nomination');

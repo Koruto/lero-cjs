@@ -21,7 +21,7 @@ async function execute(interaction) {
   // console.log(playingMembers);
 
   define_Nomination(playingMembers);
-  define_Game();
+  define_Game(interaction.createdTimestamp);
   define_History();
 
   await interaction.reply('Reached');

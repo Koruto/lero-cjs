@@ -3,12 +3,13 @@ const {
   closeConnection,
 } = require('../database/interactWithDB');
 
-async function define_Game() {
+async function define_Game(startingTime) {
+  const endDayTime = Math.floor(startingTime / 1000) + 1_72_800;
   const db = await openConnection();
 
   await db.run(`DROP TABLE IF EXISTS Game`);
   await db.run(
-    `CREATE TABLE Game (id INTEGER PRIMARY KEY AUTOINCREMENT ,day INTEGER DEFAULT 1, night BOOLEAN DEFAULT 0 ,createdAt INTEGER DEFAULT 0)`
+    `CREATE TABLE Game (id INTEGER PRIMARY KEY AUTOINCREMENT ,day INTEGER DEFAULT 1, night BOOLEAN DEFAULT 0 ,closingAt INTEGER DEFAULT ${endDayTime})`
   );
 
   await db.run(`INSERT INTO Game DEFAULT VALUES`);

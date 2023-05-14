@@ -6,14 +6,14 @@
 // const ROOM_LIMIT = 3;
 
 // // Some problem with creating the default room, it should already exist, no?
-// //   const twelveHoursInMs = 43200; // 12 hours in seconds
-// // const twelveHoursInMs = 60; // 1 minute in seconds
+// //   const twelveHoursInSeconds = 43200; // 12 hours in seconds
+// // const twelveHoursInSeconds = 60; // 1 minute in seconds
 // const Game = {
 //   playingId: '1082346141003296871',
 //   noVoteId: '1078003254807506954',
 //   aliveId: '1074139812078026822',
 //   deadId: '1074139806839349368',
-//   twelveHoursInMs: 43200,
+//   twelveHoursInSeconds: 43200,
 //   townSquareRole: '1075403559006388334',
 //   categoryId: '1074082117589401730',
 //   archivedCategoryId: '1101894036824006759',
@@ -75,14 +75,15 @@ const {
 const ROOM_LIMIT = 3; // 1 is Default, so in 3 it will be 4 people in room
 
 // SOme problem with creating the default room, it should already exist, no?
-//   const twelveHoursInMs = 43200; // 12 hours in seconds
-// const twelveHoursInMs = 60; // 1 minute in seconds
+//   const twelveHoursInSeconds = 43200; // 12 hours in seconds
+// const twelveHoursInSeconds = 60; // 1 minute in seconds
 const Game = {
   playingId: '1101087801925181485',
   noVoteId: '1101602215212372179',
+  pendingId: '1107011779776761999', // ! Add this for Ele Game Constants
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
-  twelveHoursInMs: 43200,
+  twelveHoursInSeconds: 43200,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',

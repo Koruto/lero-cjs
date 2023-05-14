@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { nominationTimeTimer } = require('../../util/timeOverNomination');
+const { nominationTimeTimer } = require('../../util/nominationTimeTimer');
 
 module.exports = {
   data: new SlashCommandBuilder()
