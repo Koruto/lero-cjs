@@ -1,3 +1,4 @@
+const { time } = require('discord.js');
 const {
   openConnection,
   closeConnection,
@@ -14,6 +15,7 @@ async function showVotes(interaction) {
     const row = await db.get(
       'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
     );
+    let newNominationTime = '';
 
     if (row && row.onGoing) {
       message += `${row.nominated}'s execution player list:\n`;
@@ -30,16 +32,26 @@ async function showVotes(interaction) {
       }
 
       message += `\n${row.votes}/${row.majority} votes acquired.\n?? votes to hammer.`;
+
+      const nominationTime = time(row.closingAt, 'R');
+      newNominationTime = `\nCan Nominate Again ${nominationTime}`;
     } else {
       message += 'No Ongoing Nomination Currently';
     }
+    message += '```';
+
+    const GameRow = await db.get(`SELECT * FROM Game WHERE id = 1`);
+    const newDayTime = time(GameRow.closingAt, 'R');
+
+    if (newNominationTime) message += newNominationTime;
+
+    message += `\nDay ends  ${newDayTime}`;
   } catch (error) {
     console.error(error);
   } finally {
     await closeConnection(db);
   }
   // Pinging
-  message += '```';
   await interaction.followUp(message);
   nominationTimeTimer(interaction);
 }

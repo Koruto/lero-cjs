@@ -7,13 +7,6 @@ const data = new SlashCommandBuilder()
   .setDescription('Displays current Votes!');
 
 async function execute(interaction) {
-  if (interaction.channel.name !== 'town-square') {
-    await interaction.reply({
-      content: `Use command from 'town-square'`,
-      ephemeral: true,
-    });
-    return;
-  }
   const timeOfDay = await define_Variables();
   if (timeOfDay.isNightTime) {
     await interaction.reply({
@@ -22,7 +15,7 @@ async function execute(interaction) {
     });
     return;
   }
-  // Check if User is doing command from Private room or not
+
   await interaction.reply({ content: 'Showing Status: ', ephemeral: true });
   showVotes(interaction);
 }

@@ -81,7 +81,7 @@ async function execute(interaction) {
     }
 
     const alreadyNominated = await db.get(
-      `SELECT COUNT(*) as count FROM Nominations WHERE day = ? AND nominee = ?`,
+      `SELECT COUNT(*) as count FROM Nominations WHERE day = ? AND nominee = ? AND closingAt <> 0`,
       [timeOfDay.currentDay, nominee]
     );
 
@@ -138,7 +138,7 @@ async function execute(interaction) {
     // Check votes column
 
     if (newMajority) {
-      nominationMessage += `\nOne player is already nominated, to stop that get ${
+      nominationMessage += `\nOne player is already up for execution, to stop that get ${
         newMajority.votes
       } votes, and to make this player nominate get ${
         newMajority.votes + 1

@@ -3,7 +3,6 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('time')

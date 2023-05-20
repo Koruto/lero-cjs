@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, time } = require('discord.js');
 const { define_Nomination } = require('../../models/nomination');
 const { define_History } = require('../../models/history');
 const { define_Game } = require('../../models/gameConstants');
@@ -29,6 +29,10 @@ async function execute(interaction) {
             allow: Game.viewChannelPermission,
           },
           {
+            id: Game.spectatorId,
+            allow: Game.viewChannelPermission,
+          },
+          {
             id: interaction.guild.id,
             deny: [Game.sendMessagePermission, Game.viewChannelPermission],
           },
@@ -42,6 +46,11 @@ async function execute(interaction) {
             allow: Game.viewChannelPermission,
           },
           {
+            id: Game.spectatorId,
+            allow: Game.viewChannelPermission,
+            deny: Game.sendMessagePermission,
+          },
+          {
             id: interaction.guild.id,
             deny: Game.viewChannelPermission,
           },
@@ -49,14 +58,10 @@ async function execute(interaction) {
       });
     }
     if (place !== 'Town Square') {
-      await channel.send(`
-  Welcome to a private room!
-
-  Use this room as you'd like.
-  No one else will see this conversation without someone's permission, so don't worry. All conversations are saved.
-
-  To leave,  use /leave-room
-  P.S. If the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`);
+      let startingMessage = '```';
+      startingMessage += `Welcome to your own private room!\n\nPlease feel free to use this room to discuss whatever you may need. This is completely private, no other player will be able to see this conversation (All conversations will be saved and shared in the end).\n\nTo leave, use the command: /leave-room\n\nP.S.: Do not forget, if the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`;
+      startingMessage += '```';
+      await channel.send(startingMessage);
     }
 
     console.log(`Created channel ${channel.name} with ID ${channel.id}`);

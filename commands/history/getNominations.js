@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, REST } = require('discord.js');
 const {
   openConnection,
   closeConnection,
@@ -24,6 +24,7 @@ async function execute(interaction) {
       const nominatedBy = nomination.nominated;
       const votes = nomination.votes; // get the column value based on the user who nominated
       const majority = nomination.majority;
+      const forceStopped = !nomination.closingAt;
       let playerVotes = [];
       for (const key in nomination) {
         if (key.startsWith('_') && nomination[key] === 1) {
@@ -36,8 +37,10 @@ async function execute(interaction) {
         const memberName = member.displayName;
         memberNames.push(memberName);
       }
-      const resultString = `${nomination.id}: '${nominatedBy}' was Nominated by '${nominee}', [${votes}/${majority}] , Voted By: ${memberNames}`;
-
+      let resultString = `${nomination.id}: '${nominatedBy}' was Nominated by '${nominee}', [${votes}/${majority}] , Voted By: ${memberNames}`;
+      if (forceStopped) {
+        resultString += ` [Nomination Force Stopped]`;
+      }
       if (!resultsByDay[day]) {
         resultsByDay[day] = [`${resultString}`];
       } else {

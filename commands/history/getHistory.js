@@ -49,7 +49,7 @@ async function execute(interaction) {
     await interaction.reply('History only for playing players');
     return;
   }
-  await interaction.reply(`History as follows:`);
+  await interaction.reply(`Room History for ${userHistory}:`);
   const db = await openConnection();
   let query = `SELECT * FROM History WHERE `;
 
@@ -82,8 +82,7 @@ async function execute(interaction) {
       historyMessage += `\nDay ${dayHistory}:\n`;
 
       historyMessage +=
-        resultsByDay[dayHistory]?.join('\n') ??
-        'Town-Square is being introverted';
+        resultsByDay[dayHistory]?.join('\n') ?? `Hasn't been in a room yet.`;
     }
     // for (const [day, results] of Object.entries(resultsByDay)) {
     //   historyMessage += `\nDay ${day}:\n`;

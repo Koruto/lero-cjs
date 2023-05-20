@@ -33,10 +33,6 @@ async function execute(interaction) {
     });
     return;
   }
-
-  const interactionUser = await interaction.guild.members.cache.get(
-    interaction.user.id
-  );
   if (interaction.channel.name != 'town-square') {
     await interaction.reply({
       content: 'Use the Command only in Town Square',
@@ -44,6 +40,10 @@ async function execute(interaction) {
     });
     return;
   }
+
+  const interactionUser = await interaction.guild.members.cache.get(
+    interaction.user.id
+  );
   if (!interactionUser.roles.cache.has(Game.townSquareRole)) {
     await interaction.reply({
       content: 'Command only for people in Town Square',
@@ -55,6 +55,8 @@ async function execute(interaction) {
   // Adding players into an array
   let target = [interactionUser.user];
   target.push(await interaction.options.getUser('user'));
+
+  console.log(await interaction.options.getUser('user'));
 
   for (let i = 1; i <= ROOM_LIMIT - 2; i++) {
     if (await interaction.options.getUser(`user${i}`))
@@ -71,7 +73,8 @@ async function execute(interaction) {
     const haveTownSquareRole = await member.roles.cache.has(
       Game.townSquareRole
     );
-    targetNamesSet.add(user.username);
+
+    targetNamesSet.add(member.displayName);
     if (!haveTownSquareRole) playersNotAvailable = true;
   }
 

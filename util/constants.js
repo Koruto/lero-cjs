@@ -13,6 +13,7 @@ const Game = {
   pendingId: '1107011779776761999',
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
+  spectatorId: '1109510808397951016',
   twelveHoursInSeconds: 43200,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
@@ -55,6 +56,7 @@ const Game = {
 //   pendingId: '1107011779776761999',  // ! Change this before starting Game
 //   aliveId: '1074139812078026822',
 //   deadId: '1074139806839349368',
+//   spectatorId: '1083868720063074344',
 //   twelveHoursInSeconds: 43200,
 //   townSquareRole: '1075403559006388334',
 //   categoryId: '1074082117589401730',
