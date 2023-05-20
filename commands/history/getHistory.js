@@ -29,7 +29,7 @@ async function execute(interaction) {
     });
     return;
   }
-  const userHistory = await interaction.options.getUser('user').username;
+
   const dayHistory =
     (await interaction.options.getInteger('day')) || timeOfDay.currentDay;
 
@@ -43,8 +43,10 @@ async function execute(interaction) {
     return;
   }
 
-  const taggedUserId = interaction.options.getUser('user').id;
-  const taggedUser = interaction.guild.members.cache.get(taggedUserId);
+  const taggedUserId = await interaction.options.getUser('user').id;
+  const taggedUser = await interaction.guild.members.cache.get(taggedUserId);
+  const userHistory = taggedUser.displayName;
+
   if (!taggedUser.roles.cache.has(Game.playingId)) {
     await interaction.reply('History only for playing players');
     return;

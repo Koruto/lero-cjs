@@ -154,8 +154,10 @@ async function execute(interaction) {
 
   for (let i = 0; i < target.length; i++) {
     if (target[i]) {
+      const member = await interaction.guild.members.cache.get(target[i].id);
+
       query += `, user${i + 1}`;
-      values += `, '${target[i].username}'`;
+      values += `, '${member.displayName}'`;
     }
   }
   query += values + ')';

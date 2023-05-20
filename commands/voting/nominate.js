@@ -64,8 +64,8 @@ async function execute(interaction) {
   await checkOngoing(interaction);
   await interaction.deferReply('');
 
-  const nominated = await interaction.options.getUser('user').username;
-  const nominee = interaction.user.username;
+  const nominated = taggedUser.displayName;
+  const nominee = interaction.member.displayName;
   // TODO Also check day,
 
   const db = await openConnection();

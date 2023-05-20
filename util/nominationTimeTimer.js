@@ -24,7 +24,7 @@ async function nominationTimeTimer(interaction) {
         if (column[0] == '_' && row[column]) {
           const userId = column.slice(1);
           const member = await interaction.guild.members.fetch(userId);
-          const voterName = await member.user.username;
+          const voterName = await member.displayName;
           message += `- ${voterName}`;
           message += (await member.roles.cache.has(Game.noVoteId))
             ? ` (Ghost vote)\n`
