@@ -56,7 +56,7 @@ async function execute(interaction) {
   let target = [interactionUser.user];
   target.push(await interaction.options.getUser('user'));
 
-  console.log(await interaction.options.getUser('user'));
+  // console.log(await interaction.options.getUser('user'));
 
   for (let i = 1; i <= ROOM_LIMIT - 2; i++) {
     if (await interaction.options.getUser(`user${i}`))

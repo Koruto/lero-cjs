@@ -10,14 +10,12 @@ async function disbandRoom(interaction) {
     reason: 'Duplicate channel', // Set a reason for the duplication (optional)
   });
   // console.log(newChannel);
-  await newChannel.send(`
-Welcome to a private room!
 
-Use this room as you'd like.
-No one else will see this conversation without someone's permission, so don't worry. All conversations are saved.
-  
-To leave,  use /leave-room
-P.S. If the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`);
+  let startingMessage = '```';
+  startingMessage += `Welcome to your own private room!\n\nPlease feel free to use this room to discuss whatever you may need. This is completely private, no other player will be able to see this conversation (All conversations will be saved and shared in the end).\n\nTo leave, use the command: /leave-room\n\nP.S.: Do not forget, if the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`;
+  startingMessage += '```';
+  await newChannel.send(startingMessage);
+
   if (channel.parentID !== Game.archivedCategoryId) {
     try {
       await channel.setParent(Game.archivedCategoryId);
