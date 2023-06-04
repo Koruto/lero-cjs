@@ -110,6 +110,7 @@ async function execute(interaction) {
 
   // Array of available rooms
   // ! Check if Can use the channel directly and just use edit at end
+
   const channelNames = await interaction.guild.channels.cache
     .filter(
       (channel) =>
@@ -123,6 +124,7 @@ async function execute(interaction) {
   const randomChannel =
     channelNames[Math.floor(Math.random() * channelNames.length)];
 
+  // ! Add some error before slip that room not avaiblabe
   // Converting Channel to valid Role Name, 'town-square' to 'Town Square'
   const roleOfRandomChannel = randomChannel
     .split('-')

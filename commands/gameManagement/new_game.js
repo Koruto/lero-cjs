@@ -2,7 +2,7 @@ const { SlashCommandBuilder, time } = require('discord.js');
 const { define_Nomination } = require('../../models/nomination');
 const { define_History } = require('../../models/history');
 const { define_Game } = require('../../models/gameConstants');
-const { Game } = require('../../util/constants');
+const { Game, messageConstants } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('new-game')
@@ -57,12 +57,8 @@ async function execute(interaction) {
         ],
       });
     }
-    if (place !== 'Town Square') {
-      let startingMessage = '```';
-      startingMessage += `Welcome to your own private room!\n\nPlease feel free to use this room to discuss whatever you may need. This is completely private, no other player will be able to see this conversation (All conversations will be saved and shared in the end).\n\nTo leave, use the command: /leave-room\n\nP.S.: Do not forget, if the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`;
-      startingMessage += '```';
-      await channel.send(startingMessage);
-    }
+    if (place !== 'Town Square')
+      await channel.send(messageConstants.privateRoomStartingMessage);
 
     console.log(`Created channel ${channel.name} with ID ${channel.id}`);
   }

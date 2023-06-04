@@ -61,7 +61,7 @@ async function execute(interaction) {
       await interaction.editReply('Vote Confirmed');
       if (interaction.member.roles.cache.has(Game.deadId)) {
         await interaction.followUp('Your one dead vote is used up!');
-        interaction.member.roles.add(Game.noVoteId);
+        await interaction.member.roles.add(Game.noVoteId);
       }
 
       console.log(`Row updated: ${row.id}`);

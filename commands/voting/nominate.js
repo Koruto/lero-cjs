@@ -126,9 +126,8 @@ async function execute(interaction) {
         nominationFinishingTime,
       ]
     );
-    let nominationMessage = '';
 
-    nominationMessage += `\nThe town gathers in the centre for a very needed conversation. ${nominated} has been chosen by ${nominee} and is placed in the centre for everyone to see. It is time to judge their character.\n\n<@&${Game.aliveId}> and <@&${Game.deadId}> if anyone would like for the execution go forward please vote for them.\n\nType /vote for voting\n\nThe vote will be open for 12 hours. You may take back your vote. Just type /unvote.
+    let nominationMessage = `\nThe town gathers in the centre for a very needed conversation. ${nominated} has been chosen by ${nominee} and is placed in the centre for everyone to see. It is time to judge their character.\n\n<@&${Game.aliveId}> and <@&${Game.deadId}> if anyone would like for the execution go forward please vote for them.\n\nType /vote for voting\n\nThe vote will be open for 12 hours. You may take back your vote. Just type /unvote.
 `;
 
     // Checking if previous nomination was succesful

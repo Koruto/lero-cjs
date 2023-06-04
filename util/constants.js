@@ -3,7 +3,15 @@ const {
   closeConnection,
 } = require('../database/interactWithDB');
 
+const { codeBlock } = require('discord.js');
+
 const ROOM_LIMIT = 3; // 1 is Default, so in 3 it will be 4 people in room
+
+const messageConstants = {
+  privateRoomStartingMessage: codeBlock(
+    `Welcome to your own private room!\n\nPlease feel free to use this room to discuss whatever you may need. This is completely private, no other player will be able to see this conversation (All conversations will be saved and shared in the end).\n\nTo leave, use the command: /leave-room\n\nP.S.: Do not forget, if the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`
+  ),
+};
 
 // For Koruto Server
 
@@ -109,4 +117,5 @@ module.exports = {
   Game,
   ROOM_LIMIT,
   define_Variables,
+  messageConstants,
 };

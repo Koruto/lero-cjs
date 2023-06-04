@@ -1,4 +1,4 @@
-const { Game } = require('./constants');
+const { Game, messageConstants } = require('./constants');
 
 async function disbandRoom(interaction) {
   const channelId = interaction.channel.id;
@@ -11,10 +11,7 @@ async function disbandRoom(interaction) {
   });
   // console.log(newChannel);
 
-  let startingMessage = '```';
-  startingMessage += `Welcome to your own private room!\n\nPlease feel free to use this room to discuss whatever you may need. This is completely private, no other player will be able to see this conversation (All conversations will be saved and shared in the end).\n\nTo leave, use the command: /leave-room\n\nP.S.: Do not forget, if the number of players are less than 2, Chat will be deleted immediately, so make sure they see the messages before leaving the room.`;
-  startingMessage += '```';
-  await newChannel.send(startingMessage);
+  await newChannel.send(messageConstants.privateRoomStartingMessage);
 
   if (channel.parentID !== Game.archivedCategoryId) {
     try {
