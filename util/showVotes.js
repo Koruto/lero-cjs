@@ -1,4 +1,4 @@
-const { time } = require('discord.js');
+const { time, codeBlock } = require('discord.js');
 const {
   openConnection,
   closeConnection,
@@ -9,7 +9,7 @@ const { Game } = require('./constants');
 
 async function showVotes(interaction) {
   await checkOngoing(interaction);
-  let message = '```';
+  let message = '';
   const db = await openConnection();
   try {
     const row = await db.get(
@@ -38,7 +38,7 @@ async function showVotes(interaction) {
     } else {
       message += 'No Ongoing Nomination Currently';
     }
-    message += '```';
+    message = codeBlock(message);
 
     const GameRow = await db.get(`SELECT * FROM Game WHERE id = 1`);
     const newDayTime = time(GameRow.closingAt, 'R');

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, codeBlock } = require('discord.js');
 const {
   openConnection,
   closeConnection,
@@ -14,7 +14,7 @@ async function execute(interaction) {
 
   let query = `SELECT * FROM Nominations`;
   let resultsByDay = {};
-  let nominationMessage = '```';
+  let nominationMessage = '';
   try {
     const nominations = await db.all(query);
 
@@ -54,13 +54,13 @@ async function execute(interaction) {
 Day ${day}:\n`;
       nominationMessage += results.join('\n');
     }
-    nominationMessage += '```';
+    // nominationMessage += '```';
   } catch (err) {
     console.error(err.message);
   }
 
   await closeConnection(db);
-  await interaction.reply(nominationMessage);
+  await interaction.reply(codeBlock(nominationMessage));
 
   // Pinging
 }

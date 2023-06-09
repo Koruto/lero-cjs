@@ -3,13 +3,14 @@ const {
   closeConnection,
 } = require('../database/interactWithDB');
 const { Game } = require('./constants');
+const { codeBlock } = require('discord.js');
 
 const { startTimer } = require('./startTimer');
 
 async function nominationTimeTimer(interaction) {
   const db = await openConnection();
   // Check if User is doing command from Private room or not
-  let message = '```';
+  let message = '';
 
   const row = await db.get(
     'SELECT * FROM Nominations ORDER BY closingAt DESC LIMIT 1'
@@ -40,14 +41,13 @@ async function nominationTimeTimer(interaction) {
           : `Not Enough Votes. Execution Failed`;
 
       // Pinging
-      message += '```';
       await closeConnection(db);
 
       const channel = await interaction.guild.channels.cache.find(
         (channel) => channel.name === 'town-square'
       );
 
-      await channel.send(message);
+      await channel.send(codeBlock(message));
     })
     .catch((error) => {
       // Code to  when promise rejects

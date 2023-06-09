@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, codeBlock } = require('discord.js');
 const {
   openConnection,
   closeConnection,
@@ -51,7 +51,8 @@ async function execute(interaction) {
     await interaction.reply('History only for playing players');
     return;
   }
-  await interaction.reply(`Room History for ${userHistory}:`);
+  await interaction.deferReply(``);
+
   const db = await openConnection();
   let query = `SELECT * FROM History WHERE `;
 
@@ -61,7 +62,7 @@ async function execute(interaction) {
   query = query.slice(0, -3);
 
   let resultsByDay = {};
-  let historyMessage = '```';
+  let historyMessage = '';
   try {
     const rows = await db.all(query);
     // Create an object to hold the results grouped by day
@@ -80,6 +81,7 @@ async function execute(interaction) {
     }
 
     // Print the results by day
+    // Funny Bug here is that if day is 0, the following won't be executed but day can't be 0, so nicely planned :)
     if (dayHistory) {
       historyMessage += `\nDay ${dayHistory}:\n`;
 
@@ -90,8 +92,6 @@ async function execute(interaction) {
     //   historyMessage += `\nDay ${day}:\n`;
     //   historyMessage += results.join('\n');
     // }
-
-    historyMessage += '```';
   } catch (err) {
     console.error(err.message);
   } finally {
@@ -100,7 +100,9 @@ async function execute(interaction) {
 
   // Pinging
 
-  await interaction.followUp(`${historyMessage}`);
+  await interaction.editReply(
+    `Room History for ${userHistory}:\n${codeBlock(historyMessage)}`
+  );
 }
 
 module.exports = {
