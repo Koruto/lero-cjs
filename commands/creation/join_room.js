@@ -168,6 +168,7 @@ async function execute(interaction) {
 }
 
 module.exports = {
+  cooldown: 5,
   data: data,
   execute: execute,
 };
