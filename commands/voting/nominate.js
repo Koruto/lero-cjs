@@ -69,12 +69,11 @@ async function execute(interaction) {
       return;
     }
 
-    const alreadyUpForExecution = await db.get(
-      `SELECT COUNT(*) as count FROM Nominations WHERE nominated = ? AND votes >= majority AND closingAt <> 0 `,
-      [nominated]
+    const rowWithMostVote = await db.get(
+      `SELECT * FROM Nominations WHERE votes >= majority AND closingAt <> 0 ORDER BY votes DESC LIMIT 1;`
     );
 
-    if (alreadyUpForExecution.count) {
+    if (rowWithMostVote?.nominated == nominated) {
       await interaction.editReply(
         `${nominated} is already up for Execution! Give them a break`
       );

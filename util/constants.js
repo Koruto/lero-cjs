@@ -35,7 +35,7 @@ const Game = {
   aliveId: '1101859415767924930',
   deadId: '1101602543454408764',
   spectatorId: '1109510808397951016',
-  twelveHoursInSeconds: 43200,
+  twelveHoursInSeconds: 60,
   townSquareRole: '1100061376694722693',
   categoryId: '1100059641498574949',
   archivedCategoryId: '1100059677380849774',
