@@ -21,6 +21,7 @@ const data = new SlashCommandBuilder()
   );
 
 async function execute(interaction) {
+  const timeOfDay = await define_Variables();
   // Check if user being nominated is playing or not
   const taggedUserId = interaction.options.getUser('user').id;
   const taggedUser = interaction.guild.members.cache.get(taggedUserId);

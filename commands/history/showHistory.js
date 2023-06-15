@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, ROOM_LIMIT } = require('../../util/constants');
+const { Game, ROOM_LIMIT, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('history')
@@ -21,6 +21,7 @@ const data = new SlashCommandBuilder()
   );
 
 async function execute(interaction) {
+  const timeOfDay = await define_Variables();
   const dayHistory =
     (await interaction.options.getInteger('day')) || timeOfDay.currentDay;
 

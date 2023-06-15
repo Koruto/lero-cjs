@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, ROOM_LIMIT } = require('../../util/constants');
+const { Game, ROOM_LIMIT, define_Variables } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('join-room')
@@ -24,6 +24,8 @@ for (let i = 1; i <= ROOM_LIMIT - 2; i++) {
 // TODO Players dont add players aside from those playing
 
 async function execute(interaction) {
+  const timeOfDay = await define_Variables();
+
   const interactionUser = await interaction.guild.members.cache.get(
     interaction.user.id
   );
@@ -61,7 +63,7 @@ async function execute(interaction) {
     });
     return;
   }
-  // Check if more than one user
+  // Check if there's only one user
   if (targetNamesSet.size == 1) {
     await interaction.reply({
       content: `Don't be a loner, who talks to himself, Pui!`,
@@ -130,14 +132,11 @@ async function execute(interaction) {
   let query = `INSERT INTO History (day`;
   let values = `) VALUES ( ${timeOfDay.currentDay}`;
 
-  for (let i = 0; i < target.length; i++) {
-    if (target[i]) {
-      const member = await interaction.guild.members.cache.get(target[i].id);
+  targetNamesArray.forEach((user, index) => {
+    query += `, user${index + 1}`;
+    values += `, '${user}'`;
+  });
 
-      query += `, user${i + 1}`;
-      values += `, '${member.displayName}'`;
-    }
-  }
   query += values + ')';
   await db.run(query);
   await closeConnection(db);

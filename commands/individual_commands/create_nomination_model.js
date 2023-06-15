@@ -24,7 +24,7 @@ async function execute(interaction) {
   define_Game(interaction.createdTimestamp);
   define_History();
 
-  await interaction.reply('Reached');
+  await interaction.reply('Model Created!');
 }
 
 module.exports = {
