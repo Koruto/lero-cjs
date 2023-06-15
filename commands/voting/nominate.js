@@ -70,7 +70,7 @@ async function execute(interaction) {
     }
 
     const alreadyUpForExecution = await db.get(
-      `SELECT COUNT(*) as count FROM Nominations WHERE nominated = ? AND votes >= majority AND closingAt <> 0;`,
+      `SELECT COUNT(*) as count FROM Nominations WHERE nominated = ? AND votes >= majority AND closingAt <> 0 `,
       [nominated]
     );
 
