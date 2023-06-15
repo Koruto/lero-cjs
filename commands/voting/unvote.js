@@ -5,29 +5,13 @@ const {
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/checkOngoing');
 const { showVotes } = require('../../util/showVotes');
-const { Game, define_Variables } = require('../../util/constants');
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('unvote')
   .setDescription('Removes your vote from current player being nominated!');
 
 async function execute(interaction) {
-  if (interaction.channel.name !== 'town-square') {
-    await interaction.reply({
-      content: `Use command from 'town-square'`,
-      ephemeral: true,
-    });
-    return;
-  }
-  const timeOfDay = await define_Variables();
-  if (timeOfDay.isNightTime) {
-    await interaction.reply({
-      content: 'Cannot use this command at night',
-      ephemeral: true,
-    });
-    return;
-  }
-
   if (!interaction.member.roles.cache.has(Game.playingId)) {
     await interaction.reply('Join the game to use its feature :)');
     return;

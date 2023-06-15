@@ -6,29 +6,13 @@ const {
 const { checkOngoing } = require('../../util/checkOngoing');
 const { showVotes } = require('../../util/showVotes');
 
-const { Game, define_Variables } = require('../../util/constants');
+const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('vote')
   .setDescription('Vote for the current player being nominated!');
 
 async function execute(interaction) {
-  if (interaction.channel.name !== 'town-square') {
-    await interaction.reply({
-      content: `Use command from 'town-square'`,
-      ephemeral: true,
-    });
-    return;
-  }
-  const timeOfDay = await define_Variables();
-  if (timeOfDay.isNightTime) {
-    await interaction.reply({
-      content: 'Cannot use this command at night',
-      ephemeral: true,
-    });
-    return;
-  }
-
   if (interaction.member.roles.cache.has(Game.noVoteId)) {
     await interaction.reply('You`ve already used your one Dead vote.');
     return;

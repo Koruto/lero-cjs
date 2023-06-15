@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { Game, define_Variables, ListOfCommands } = require('../util/constants');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -15,6 +16,39 @@ module.exports = {
     }
 
     try {
+      // Conditions to check validity
+
+      const notAllowedCommands = ListOfCommands['notAllowed'];
+      const onlyFromTownSquareCommands = ListOfCommands['onlyFromTownSquare'];
+
+      if (notAllowedCommands.includes(interaction.commandName)) {
+        if (!interaction.member.roles.cache.has(Game.playingId)) {
+          await interaction.reply('Join the game to use its feature :)');
+          return;
+        }
+
+        const timeOfDay = await define_Variables();
+        if (timeOfDay.isNightTime) {
+          await interaction.reply({
+            content: 'Cannot use this command at night',
+            ephemeral: true,
+          });
+          return;
+        }
+      }
+
+      if (onlyFromTownSquareCommands.includes(interaction.commandName)) {
+        if (interaction.channel.name !== 'town-square') {
+          await interaction.reply({
+            content: `Use command only from Town Square`,
+            ephemeral: true,
+          });
+          return;
+        }
+      }
+
+      // Cooldown Timer for Commands
+
       if (command?.cooldown) {
         const { cooldowns } = interaction.client;
 

@@ -3,11 +3,11 @@ const { define_Game } = require('../../models/gameConstants');
 
 const data = new SlashCommandBuilder()
   .setName('update-game-database')
-  .setDescription('Updates Game Database!')
+  .setDescription('Updates Game Database! (In Development, not to be Used)')
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
-  await interaction.reply(`Command Reached! Creating Game Database`);
+  await interaction.reply(`Command Reached! Creating Only Game Database`);
   // Assuming you have already fetched the guild and created the roles
 
   define_Game(interaction.createdTimestamp);

@@ -3,7 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, define_Variables, ROOM_LIMIT } = require('../../util/constants');
+const { Game, ROOM_LIMIT } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('join-room')
@@ -24,33 +24,9 @@ for (let i = 1; i <= ROOM_LIMIT - 2; i++) {
 // TODO Players dont add players aside from those playing
 
 async function execute(interaction) {
-  // If Condition for Wrong Access
-  const timeOfDay = await define_Variables();
-  if (timeOfDay.isNightTime) {
-    await interaction.reply({
-      content: 'Cannot use this command at night',
-      ephemeral: true,
-    });
-    return;
-  }
-  if (interaction.channel.name != 'town-square') {
-    await interaction.reply({
-      content: 'Use the Command only in Town Square',
-      ephemeral: true,
-    });
-    return;
-  }
-
   const interactionUser = await interaction.guild.members.cache.get(
     interaction.user.id
   );
-  if (!interactionUser.roles.cache.has(Game.townSquareRole)) {
-    await interaction.reply({
-      content: 'Command only for people in Town Square',
-      ephemeral: true,
-    });
-    return;
-  }
 
   // Adding players into an array
   let target = [interactionUser.user];

@@ -13,6 +13,19 @@ const messageConstants = {
   ),
 };
 
+const ListOfCommands = {
+  onlyFromTownSquare: ['join-room', 'nominate', 'unvote', 'vote'],
+  notAllowed: [
+    'join-room',
+    'leave-room',
+    'history',
+    'nominate',
+    'status',
+    'unvote',
+    'vote',
+  ],
+};
+
 // For Koruto Server
 
 const Game = {
@@ -61,7 +74,7 @@ const Game = {
 // const Game = {
 //   playingId: '1082346141003296871',
 //   noVoteId: '1078003254807506954',
-//   pendingId: '1107011779776761999',  // ! Change this before starting Game
+//   pendingId: '1082346141003296871',
 //   aliveId: '1074139812078026822',
 //   deadId: '1074139806839349368',
 //   spectatorId: '1083868720063074344',
@@ -118,4 +131,5 @@ module.exports = {
   ROOM_LIMIT,
   define_Variables,
   messageConstants,
+  ListOfCommands,
 };

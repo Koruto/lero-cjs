@@ -3,11 +3,11 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
-const { Game, define_Variables, ROOM_LIMIT } = require('../../util/constants');
+const { Game, ROOM_LIMIT } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('history')
-  .setDescription('Gets history of people talked to that User!')
+  .setDescription('Shows history of people this user talked to!')
   .addUserOption((option) =>
     option
       .setName('user')
@@ -17,19 +17,10 @@ const data = new SlashCommandBuilder()
   .addIntegerOption((option) =>
     option
       .setName('day')
-      .setDescription('Results history of specific day, Default is current Day')
+      .setDescription('Shows history of specific day, Default is current Day')
   );
 
 async function execute(interaction) {
-  const timeOfDay = await define_Variables();
-  if (timeOfDay.isNightTime) {
-    await interaction.reply({
-      content: 'Cannot use this command at night',
-      ephemeral: true,
-    });
-    return;
-  }
-
   const dayHistory =
     (await interaction.options.getInteger('day')) || timeOfDay.currentDay;
 

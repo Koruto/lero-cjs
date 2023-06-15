@@ -5,7 +5,7 @@ const {
 } = require('../../database/interactWithDB');
 const { checkOngoing } = require('../../util/checkOngoing');
 const { nominationTimeTimer } = require('../../util/nominationTimeTimer');
-const { Game, define_Variables } = require('../../util/constants');
+const { Game } = require('../../util/constants');
 const { sendNominationWarning } = require('../../util/sendNominationWarning');
 
 //   const Game.twelveHoursInSeconds = 43200; // 12 hours in seconds
@@ -21,31 +21,6 @@ const data = new SlashCommandBuilder()
   );
 
 async function execute(interaction) {
-  if (interaction.channel.name !== 'town-square') {
-    await interaction.reply({
-      content: `Use command from Town Square`,
-      ephemeral: true,
-    });
-    return;
-  }
-
-  const timeOfDay = await define_Variables();
-
-  if (timeOfDay.isNightTime) {
-    await interaction.reply({
-      content: 'Cannot use this command at night',
-      ephemeral: true,
-    });
-    return;
-  }
-  //   const db = await openConnection();
-
-  // Check if User is playing or not
-  if (!interaction.member.roles.cache.has(Game.playingId)) {
-    await interaction.reply('Join the game to use its feature :)');
-    return;
-  }
-
   // Check if user being nominated is playing or not
   const taggedUserId = interaction.options.getUser('user').id;
   const taggedUser = interaction.guild.members.cache.get(taggedUserId);
