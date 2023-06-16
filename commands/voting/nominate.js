@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, time } = require('discord.js');
 const {
   openConnection,
   closeConnection,
@@ -70,10 +70,14 @@ async function execute(interaction) {
     }
 
     const rowWithMostVote = await db.get(
-      `SELECT * FROM Nominations WHERE votes >= majority AND closingAt <> 0 ORDER BY votes DESC LIMIT 1;`
+      `SELECT * FROM Nominations WHERE day = ? AND votes = ( SELECT MAX(votes) FROM Nominations WHERE day = ? AND votes >= majority AND closingAt <> 0)`,
+      [timeOfDay.currentDay, timeOfDay.currentDay]
     );
 
-    if (rowWithMostVote?.nominated == nominated) {
+    if (
+      rowWithMostVote?.length == 1 &&
+      rowWithMostVote[0].nominated == nominated
+    ) {
       await interaction.editReply(
         `${nominated} is already up for Execution! Give them a break`
       );
@@ -104,23 +108,20 @@ async function execute(interaction) {
     const majority = Math.floor(aliveMembers / 2) + 1;
     // console.log(`Majority: ${majority}\n Total:${aliveMembers}`);
 
-    let nominationMessage = `\nThe town gathers in the centre for a very needed conversation. ${nominated} has been chosen by ${nominee} and is placed in the centre for everyone to see. It is time to judge their character.\n\n<@&${Game.aliveId}> and <@&${Game.deadId}> if anyone would like for the execution go forward please vote for them.\n\nType /vote for voting\n\nThe vote will be open for 12 hours. You may take back your vote. Just type /unvote.
-    `;
+    let nominationMessage = `\nThe town gathers in the centre for a very needed conversation. ${nominated} has been chosen by ${nominee} and is placed in the centre for everyone to see. It is time to judge their character.\n\n<@&${Game.aliveId}> and <@&${Game.deadId}> if anyone would like for the execution go forward please vote for them.\n\nType /vote for voting\n\nThe vote will be open for 12 hours. You may take back your vote. Just type /unvote.\n\n`;
 
     // Checking if previous nomination was succesful
-    const newMajority = await db.get(
-      `SELECT * FROM Nominations WHERE day = ${timeOfDay.currentDay} AND votes >= majority AND closingAt <> 0 ORDER BY votes DESC LIMIT 1`
-    );
-    // Check votes column
 
-    if (newMajority) {
-      nominationMessage += `\nOne player is already up for execution, to stop that get ${
-        newMajority.votes
+    if (rowWithMostVote?.length == 1) {
+      nominationMessage += `${
+        rowWithMostVote.nominated
+      } is already up for execution, to stop that get ${
+        rowWithMostVote.votes
       } votes, and to make this player nominate get ${
-        newMajority.votes + 1
+        rowWithMostVote.votes + 1
       } votes`;
     } else {
-      nominationMessage += `\nCurrent majority is ${majority}`;
+      nominationMessage += `Current majority is ${majority}`;
     }
 
     // Adding the Nomination to Database
