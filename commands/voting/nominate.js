@@ -69,15 +69,17 @@ async function execute(interaction) {
       return;
     }
 
-    const rowWithMostVote = await db.get(
+    const rowWithMostVote = await db.all(
       `SELECT * FROM Nominations WHERE day = ? AND votes = ( SELECT MAX(votes) FROM Nominations WHERE day = ? AND votes >= majority AND closingAt <> 0)`,
       [timeOfDay.currentDay, timeOfDay.currentDay]
     );
 
-    if (
-      rowWithMostVote?.length == 1 &&
-      rowWithMostVote[0].nominated == nominated
-    ) {
+    const alreadyForExecution = rowWithMostVote?.length == 1 ? 1 : 0;
+    const playerBeingExecuted = alreadyForExecution
+      ? rowWithMostVote[0].nominated
+      : 'ele';
+
+    if (alreadyForExecution && rowWithMostVote[0].nominated == nominated) {
       await interaction.editReply(
         `${nominated} is already up for Execution! Give them a break`
       );
@@ -105,28 +107,33 @@ async function execute(interaction) {
     ).size;
     if (Error) console.error();
     // Print out the members with the role
-    const majority = Math.floor(aliveMembers / 2) + 1;
+    let majority = Math.floor(aliveMembers / 2) + 1;
     // console.log(`Majority: ${majority}\n Total:${aliveMembers}`);
 
     let nominationMessage = `\nThe town gathers in the centre for a very needed conversation. ${nominated} has been chosen by ${nominee} and is placed in the centre for everyone to see. It is time to judge their character.\n\n<@&${Game.aliveId}> and <@&${Game.deadId}> if anyone would like for the execution go forward please vote for them.\n\nType /vote for voting\n\nThe vote will be open for 12 hours. You may take back your vote. Just type /unvote.\n\n`;
 
     // Checking if previous nomination was succesful
 
-    if (rowWithMostVote?.length == 1) {
+    if (alreadyForExecution) {
       nominationMessage += `${
-        rowWithMostVote.nominated
+        rowWithMostVote[0].nominated
       } is already up for execution, to stop that get ${
-        rowWithMostVote.votes
-      } votes, and to make this player nominate get ${
-        rowWithMostVote.votes + 1
+        rowWithMostVote[0].votes
+      } votes, and to execute this player get ${
+        rowWithMostVote[0].votes + 1
       } votes`;
+      majority = rowWithMostVote[0].votes + 1;
     } else {
+      if (rowWithMostVote[0]?.votes) {
+        console.log(rowWithMostVote);
+        majority = rowWithMostVote[0].votes + 1;
+      }
       nominationMessage += `Current majority is ${majority}`;
     }
 
     // Adding the Nomination to Database
     await db.run(
-      `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority,votes ,closingAt) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO Nominations (day, nominated, nominee, _${interaction.user.id}, majority,votes ,closingAt, upForExecution, playerBeingExecuted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         timeOfDay.currentDay,
         nominated,
@@ -135,6 +142,8 @@ async function execute(interaction) {
         majority,
         1,
         nominationFinishingTime,
+        alreadyForExecution,
+        playerBeingExecuted,
       ]
     );
     await interaction.editReply('Hope you succeed in your Endeavour!');

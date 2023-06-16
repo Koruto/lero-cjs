@@ -35,10 +35,15 @@ async function nominationTimeTimer(interaction) {
 
       message += `\n${row.votes}/${row.majority} votes acquired. Time is up.\n`;
 
-      message +=
-        row.votes >= row.majority
-          ? `${row.nominated} is up for execution.`
+      if (row.votes >= row.majority) {
+        message += `${row.nominated} is up for execution.`;
+      } else if (row.votes == row.majority - 1 && row.upForExecution) {
+        message += `Stopped Execution of ${row.playerBeingExecuted}.`;
+      } else {
+        message += row.upForExecution
+          ? `Not Enough votes. ${row.playerBeingExecuted} is again up for execution.`
           : `Not Enough Votes. Execution Failed`;
+      }
 
       // Pinging
       await closeConnection(db);

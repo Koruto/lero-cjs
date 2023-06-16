@@ -31,7 +31,14 @@ async function showVotes(interaction) {
         }
       }
 
-      message += `\n${row.votes}/${row.majority} votes acquired.\n?? votes to hammer.`;
+      if (row.upForExecution) {
+        message += `\nFor Stopping Execution of ${row.playerBeingExecuted}: ${
+          row.votes
+        }/${row.majority - 1} votes acquired.`;
+        message += `\nFor Executing ${row.nominated}: ${row.votes}/${row.majority} votes acquired.\n?? votes to hammer.`;
+      } else {
+        message += `\n${row.votes}/${row.majority} votes acquired.\n?? votes to hammer.`;
+      }
 
       const nominationTime = time(row.closingAt, 'R');
       newNominationTime = `\nCan Nominate Again ${nominationTime}`;
