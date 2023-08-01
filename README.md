@@ -62,7 +62,7 @@ Join to play Blood on the Clocktower or to contribute further in bot's developme
 
 ## Feedback
 
-If you have any feedback, please reach out to us at flyingshadow03@gmail.com
+If you have any feedback, please reach out to us at `flyingshadow03@gmail.com`
 
 Alternatively you can also drop a message on discord to `.koruto#000`
 
