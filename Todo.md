@@ -53,8 +53,8 @@ or if new nomination started
 
 ## Bugs & Glitches
 
-- Bot gives `Town Square` role to itself when game begins or `Town Square` role is given to everyone on the server.
-- Rooms transfer occuring twice, possibly due to code running a second time. Room transfer sometimes fails due to occuring twice.
+- `Town Square` role given to bot itself when game begins or `Town Square` role is given to everyone on the server.
+- `room transfer` occuring twice, possibly due to code running a second time. Room transfer sometimes fails due to occuring twice.
 - `/leave-room` is prone to bugging out.
 - `/room-history` is prone to bugging out.
 - `/create-rooms` bugs out after crossing a specific limit of rooms created `approx. 50`.
