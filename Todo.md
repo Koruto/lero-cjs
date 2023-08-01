@@ -7,7 +7,7 @@
 - Also, it is recommended that you mention in your pull request exactly what changes you have made, if it solves any bugs or adds any features (as listed below) in order to ensure that your work gets properly integrated with the code. 
 - If you discover any bug fixes or glitches during operation of this bot which has not been listed here, do not hesitate to let us know! Either through discord, email or simply a comment on this repository. 
 
-## Upcoming Code Improvements
+## Development Improvements
 
 ### Improvements to Nomination Timer 
 - Force ending day must disable use of day-time command. 
@@ -15,7 +15,7 @@
 
 ### 
 
-## Upcoming Bot features
+## Gameplay features
 
 - `Rock Paper Scissors` slash command, may be represented as `/rps`. Enables users to perform `Rock Paper Scissors` between two users. 
 ## Bugs & Glitches
