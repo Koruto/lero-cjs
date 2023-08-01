@@ -13,7 +13,8 @@
 - Force ending day must disable use of day-time command. 
 - Nominations should not be possible once day ends whether forcefully or normally.
 
-### 
+### Automatic Removal of Roles After Game ends
+- remove all game-related roles of players such as `playing`, `town-square` or `room-specific` roles.  
 
 ## Gameplay features
 
@@ -21,5 +22,19 @@
 - `Rock Paper Scissors` slash command, may be represented as `/rps`. Enables users to perform `Rock Paper Scissors` between two players. 
 - Multiple users may initiate `rock paper scissors` at same time, However, only `two` users are allowed per round. 
 
+### Room Status slash command
+- By the use of a slash command, be able to see which users are actively participating in rooms. 
+- It should also highlight which players are in each room.
+
+### Execution Status 
+- when an execution occurs, bot should change its status to display which player is being executed
+
 ## Bugs & Glitches
--
+
+- Bot gives `Town Square` role to itself when game begins or `Town Square` role is given to everyone on the server.
+- Rooms transfer occuring twice, possibly due to code running a second time. Room transfer sometimes fails due to occuring twice.
+- `/leave-room` is prone to bugging out.
+- `/room-history` is prone to bugging out.
+- `/create-rooms` bugs out after crossing a specific limit of rooms created `approx. 50`.
+- `rooms creation` occuring too fast, may lead to rate limitations.
+- `Rapid Room Creation` leads to no one being able to vote 
