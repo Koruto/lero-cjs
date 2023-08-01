@@ -8,7 +8,11 @@
 - If you discover any bug fixes or glitches during operation of this bot which has not been listed here, do not hesitate to let us know! Either through discord, email or simply a comment on this repository. 
 
 ## Upcoming Features
--
+
+### Improvements to Nomination Timer 
+
+- Force ending day must disable use of day-time command. 
+- Nominations should not be possible once day ends whether forcefully or normally.
 
 ## Bugs & Glitches
 -
