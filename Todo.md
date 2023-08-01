@@ -22,7 +22,7 @@
 - `Rock Paper Scissors` slash command, may be represented as `/rps`. Enables users to perform `Rock Paper Scissors` between two players. 
 - Multiple users may initiate `rock paper scissors` at same time, However, only `two` users are allowed per round. 
 
-### Room Status slash command
+### /room-status
 - By the use of a slash command, be able to see which users are actively participating in rooms. 
 - It should also highlight which players are in each room.
 
