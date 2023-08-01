@@ -17,6 +17,8 @@
 
 ## Gameplay features
 
-- `Rock Paper Scissors` slash command, may be represented as `/rps`. Enables users to perform `Rock Paper Scissors` between two users. 
+### Rock Paper Scissors
+- `Rock Paper Scissors` slash command, may be represented as `/rps`. Enables users to perform `Rock Paper Scissors` between two players. 
+- Multiple users may initiate `rock paper scissors` at same time, However, only `two` users are allowed per round. 
 ## Bugs & Glitches
 -
