@@ -56,9 +56,9 @@ Please adhere to this project's `code of conduct`.
 
 ## Used By
 
-This bot is actively used in [L's on the Clocktower](htm)
+This bot is actively used in [L's on the Clocktower](https://discord.gg/2Ptd8HBS7)
 
-Join to play Blood on the Clocktower or to contribute further in bot's development.
+Join to play Blood on the Clocktower or to contribute further in the bot's development.
 
 ## Feedback
 
