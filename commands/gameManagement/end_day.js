@@ -48,9 +48,12 @@ async function execute(interaction) {
     );
 
     const channelMembers = await room[1].members;
+
     for (const [key, value] of channelMembers.entries()) {
-      value.roles.remove(role.id);
-      value.roles.add(Game.townSquareRole);
+      if (value._roles.includes(role.id)) {
+        value.roles.remove(role.id);
+        value.roles.add(Game.townSquareRole);
+      }
     }
     await closeRooms(room[1]);
   }
