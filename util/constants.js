@@ -72,7 +72,7 @@ const Game = {
 // For Ele's Server
 
 // const Game = {
-//   playingId: '1082346141003296871',
+//   playingId: '1108450948306698240',
 //   noVoteId: '1078003254807506954',
 //   pendingId: '1082346141003296871',
 //   aliveId: '1074139812078026822',

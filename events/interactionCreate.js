@@ -72,7 +72,6 @@ module.exports = {
 
         cooldowns.set(command.data.name, now);
       }
-      console.log('Cry Cri, I cry a River of water, it floods the dam');
       await command.execute(interaction);
     } catch (error) {
       console.error(`Error executing ${interaction.commandName}`);

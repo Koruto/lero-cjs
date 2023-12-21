@@ -5,7 +5,8 @@
   "main": "slash.cjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -e js slash.cjs",
+    "dev": "nodemon -e js slash.cjs",
+    "start": "node slash.cjs",
     "update": "node deploy-commands.cjs"
   },
   "keywords": [],
