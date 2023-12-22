@@ -6,8 +6,7 @@ const { Game, messageConstants } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('new-game')
-  .setDescription('Starts a New Game!')
-  .setDefaultMemberPermissions(0x0000000000000008);
+  .setDescription('Starts a New Game!');
 
 async function execute(interaction) {
   await interaction.reply(`Command Reached! Starting new game`);

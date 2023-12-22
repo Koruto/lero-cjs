@@ -98,6 +98,12 @@ async function execute(interaction) {
     )
     .map((channel) => channel.name);
 
+  // Checking if Room Available
+  if (channelNames.length == 0) {
+    await interaction.followUp('Oops! All rooms in use, try again afterwards!');
+    return;
+  }
+
   // Choosing a random channel
   const randomChannel =
     channelNames[Math.floor(Math.random() * channelNames.length)];

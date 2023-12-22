@@ -6,8 +6,7 @@ const {
 
 const data = new SlashCommandBuilder()
   .setName('new-day')
-  .setDescription('Starts New Day!')
-  .setDefaultMemberPermissions(0x0000000000000008);
+  .setDescription('Starts New Day!');
 
 async function execute(interaction) {
   const endDayTime = Math.floor(interaction.createdTimestamp / 1000) + 1_72_800;

@@ -115,14 +115,14 @@ const ListOfCommands = {
 // For SilentSand Server
 
 const Game = {
-  playerId: '1186459215418626130',
+  playingId: '1186459215418626130',
   noVoteId: '1187740478637101106',
   pendingId: '1187740594945138768',
   aliveId: '1187733992041103441',
   deadId: '1186459429344907305',
   spectatorId: '1187732853312729119',
   twelveHoursInSeconds: 43200,
-  townSquareRole: '1187733761748643891',
+  townSquareRole: '1187732942450069607',
   categoryId: '1187770983298371705',
   archivedCategoryId: '1187740296214220810',
   guildId: '1100058607099318354',
@@ -153,7 +153,7 @@ const Game = {
     'Forum Posts': '1187733656349974559',
     'Terms of Services': '1187733696363634708',
     'Train Station': '1187733761748643891',
-    'Town Squage': '1187733761748643891',
+    'Town Square': '1187732942450069607',
   },
 };
 
