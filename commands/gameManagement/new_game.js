@@ -6,7 +6,8 @@ const { Game, messageConstants } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
   .setName('new-game')
-  .setDescription('Starts a New Game!');
+  .setDescription('Starts a New Game!')
+  .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
   await interaction.reply(`Command Reached! Starting new game`);
@@ -85,6 +86,7 @@ async function execute(interaction) {
 
   // Send a confirmation message
   await interaction.followUp('Game Initializing complete!');
+  console.log('--- ALL CHANNELS CREATED ---');
 }
 
 module.exports = {
