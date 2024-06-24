@@ -23,6 +23,7 @@ async function showVotes(interaction) {
         if (column[0] == '_' && row[column]) {
           const userId = column.slice(1);
           const member = await interaction.guild.members.fetch(userId);
+          if (!(await member.roles.cache.has(Game.playingId))) continue;
           const voterName = await member.displayName;
           message += `- ${voterName}`;
           message += (await member.roles.cache.has(Game.noVoteId))
