@@ -1,1 +1,1 @@
-worker: node slash.cjs
+worker: node deploy-commands.cjs && node slash.cjs
