@@ -3,6 +3,7 @@ const { define_Nomination } = require('../../models/nomination');
 const { define_History } = require('../../models/history');
 const { define_Game } = require('../../models/gameConstants');
 const { Game, messageConstants } = require('../../util/constants');
+const { define_Rooms } = require('../../models/rooms');
 
 const data = new SlashCommandBuilder()
   .setName('new-game')
@@ -83,6 +84,7 @@ async function execute(interaction) {
   define_Nomination(playingMembers);
   define_Game(interaction.createdTimestamp);
   define_History(); //To be added later on
+  define_Rooms(playingMembers);
 
   // Send a confirmation message
   await interaction.followUp('Game Initializing complete!');

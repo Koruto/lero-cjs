@@ -3,28 +3,47 @@ const {
   closeConnection,
 } = require('../database/interactWithDB');
 
-async function add_Player(newPlayerId) {
+async function addPlayer(newPlayerId) {
   const db = await openConnection();
   try {
     const newColumn = `_${newPlayerId}`;
-    const defaultValue = 'BOOLEAN DEFAULT 0';
 
-    const columnExistsQuery = `
-    SELECT 1
-    FROM pragma_table_info('Nominations')
-    WHERE name = ?;
-  `;
-    const columnExists = await db.get(columnExistsQuery, [newColumn]);
+    const defaultNominationsValue = 'BOOLEAN DEFAULT 0';
+    const defaultRoomsValue = 'INTEGER DEFAULT 0';
 
-    if (!columnExists)
-      await db.run(`ALTER TABLE Nominations ADD ${newColumn} ${defaultValue}`);
+    const columnExistsQuery = (table) => `
+      SELECT 1
+      FROM pragma_table_info('${table}')
+      WHERE name = ?;
+    `;
+
+    const checkColumnExists = async (table) => {
+      const query = columnExistsQuery(table);
+      return db.get(query, [newColumn]);
+    };
+
+    const addColumn = async (table, defaultValue) => {
+      const alterTableQuery = `ALTER TABLE ${table} ADD ${newColumn} ${defaultValue}`;
+      await db.run(alterTableQuery);
+    };
+
+    const columnExistsInNominations = await checkColumnExists('Nominations');
+    const columnExistsInRooms = await checkColumnExists('Rooms');
+
+    if (!columnExistsInNominations) {
+      await addColumn('Nominations', defaultNominationsValue);
+    }
+
+    if (!columnExistsInRooms) {
+      await addColumn('Rooms', defaultRoomsValue);
+    }
   } catch (err) {
-    console.log('Error: ', err);
+    console.error('Error: ', err);
   } finally {
-    // Close the database
     await closeConnection(db);
   }
 }
+
 module.exports = {
-  add_Player,
+  addPlayer,
 };

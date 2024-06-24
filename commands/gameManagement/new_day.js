@@ -3,6 +3,7 @@ const {
   openConnection,
   closeConnection,
 } = require('../../database/interactWithDB');
+const { refreshRoomsLimit } = require('../../models/refreshRoomsLimit');
 
 const data = new SlashCommandBuilder()
   .setName('new-day')
@@ -17,6 +18,8 @@ async function execute(interaction) {
     ` UPDATE Game SET day = day + 1, night = 0, roomCount = 0, closingAt = ${endDayTime} WHERE id = 1`
   );
   await closeConnection(db);
+
+  refreshRoomsLimit();
 
   const townSquareChannel = await interaction.guild.channels.cache.find(
     (ch) => ch.name === 'town-square'

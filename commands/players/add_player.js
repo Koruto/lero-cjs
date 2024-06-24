@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { Game } = require('../../util/constants');
-const { add_Player } = require('../../models/addPlayer');
+const { addPlayer } = require('../../models/addPlayer');
 
 const data = new SlashCommandBuilder()
   .setName('add-player')
@@ -28,7 +28,7 @@ async function execute(interaction) {
     return;
   }
 
-  add_Player(newPlayer.id);
+  addPlayer(newPlayer.id);
 
   await newPlayerMember.roles.add(Game.townSquareRole);
   await newPlayerMember.roles.add(Game.playingId);

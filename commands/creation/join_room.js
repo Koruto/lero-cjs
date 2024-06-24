@@ -72,6 +72,52 @@ async function execute(interaction) {
     return;
   }
 
+  const db = await openConnection();
+  let message = '';
+  let limitReached = false;
+
+  try {
+    const getRoomCountQuery = `SELECT roomLimit FROM Game WHERE id = 1`;
+    const game = await db.get(getRoomCountQuery);
+    const roomLimit = game.roomLimit;
+
+    const getPlayerLimitQuery = `SELECT _${interaction.user.id} FROM Rooms WHERE id = (SELECT MAX(id) FROM Rooms)`;
+    const roomsData = await db.get(getPlayerLimitQuery);
+    const playerRoomLimit = roomsData[`_${interaction.user.id}`];
+
+    if (roomLimit === 0) {
+      message = 'No more rooms can be created. Room creation is frozen.';
+      limitReached = true;
+    } else if (roomLimit < 0) {
+      await db.run(
+        `UPDATE Rooms SET _${interaction.user.id} = _${interaction.user.id} + 1 WHERE id = (SELECT MAX(id) FROM Rooms)`
+      );
+    } else {
+      const remainingRooms = roomLimit - playerRoomLimit;
+
+      if (remainingRooms <= 0) {
+        message = `You have reached your daily room creation limit. ${playerRoomLimit}/${roomLimit}`;
+        limitReached = true;
+      } else {
+        message = `\nYou can create ${remainingRooms - 1} more rooms today. ${
+          playerRoomLimit + 1
+        }/${roomLimit}`;
+
+        await db.run(
+          `UPDATE Rooms SET _${interaction.user.id} = _${interaction.user.id} + 1 WHERE id = (SELECT MAX(id) FROM Rooms)`
+        );
+      }
+    }
+  } catch (err) {
+    console.error('Error: ', err);
+    return err;
+  }
+
+  if (limitReached) {
+    await interaction.reply(`${message}.\nNo more rooms can be created today`);
+    return;
+  }
+
   let targetNames = '';
   const targetNamesArray = Array.from(targetNamesSet);
   targetNamesArray.forEach((user, index) => {
@@ -83,7 +129,7 @@ async function execute(interaction) {
     }
   });
   await interaction.reply(
-    `Request Received! Users to be added: ${targetNames}`
+    `Request Received! Users to be added: ${targetNames}.${message}`
   );
 
   // Array of available rooms
@@ -134,7 +180,6 @@ async function execute(interaction) {
 
   // Adding to Database
 
-  const db = await openConnection();
   let query = `INSERT INTO History (day`;
   let values = `) VALUES ( ${timeOfDay.currentDay}`;
 

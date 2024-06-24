@@ -10,7 +10,7 @@ async function define_Game(startingTime) {
   try {
     await db.run(`DROP TABLE IF EXISTS Game`);
     await db.run(
-      `CREATE TABLE Game (id INTEGER PRIMARY KEY AUTOINCREMENT ,day INTEGER DEFAULT 0, night BOOLEAN DEFAULT 0 , roomCount INTEGER DEFAULT 0, closingAt INTEGER DEFAULT ${endDayTime})`
+      `CREATE TABLE Game (id INTEGER PRIMARY KEY AUTOINCREMENT ,day INTEGER DEFAULT 0, night BOOLEAN DEFAULT 0 , roomCount INTEGER DEFAULT 0, roomLimit INTEGER DEFAULT -1, closingAt INTEGER DEFAULT ${endDayTime})`
     );
 
     await db.run(`INSERT INTO Game DEFAULT VALUES`);

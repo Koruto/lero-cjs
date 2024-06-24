@@ -4,7 +4,6 @@ const {
   closeConnection,
 } = require('../../database/interactWithDB');
 const { Game } = require('../../util/constants');
-const { add_Player } = require('../../models/addPlayer');
 
 const data = new SlashCommandBuilder()
   .setName('remove-player')

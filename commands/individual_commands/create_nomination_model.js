@@ -23,6 +23,7 @@ async function execute(interaction) {
   define_Nomination(playingMembers);
   define_Game(interaction.createdTimestamp);
   define_History();
+  define_Rooms(playingMembers);
 
   await interaction.reply('Model Created!');
 }
