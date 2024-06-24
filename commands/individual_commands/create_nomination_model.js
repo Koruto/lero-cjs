@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { define_Nomination } = require('../../models/nomination');
 const { define_History } = require('../../models/history');
 const { define_Game } = require('../../models/gameConstants');
+const { define_Rooms } = require('../../models/rooms');
 const { Game } = require('../../util/constants');
 
 const data = new SlashCommandBuilder()
