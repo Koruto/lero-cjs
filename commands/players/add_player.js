@@ -14,29 +14,33 @@ const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {
-  const newPlayer = await interaction.options.getUser('new-player');
+  try {
+    const newPlayer = await interaction.options.getUser('new-player');
 
-  const newPlayerMember = await interaction.guild.members.cache.get(
-    newPlayer.id
-  );
+    const newPlayerMember = await interaction.guild.members.cache.get(
+      newPlayer.id
+    );
 
-  if (newPlayerMember.roles.cache.has(Game.playingId)) {
-    await interaction.reply({
-      content: 'Player is already in the game. Choose someone else',
-      ephemeral: true,
-    });
-    return;
+    if (newPlayerMember.roles.cache.has(Game.playingId)) {
+      await interaction.reply({
+        content: 'Player is already in the game. Choose someone else',
+        ephemeral: true,
+      });
+      return;
+    }
+
+    addPlayer(newPlayer.id);
+
+    await newPlayerMember.roles.add(Game.townSquareRole);
+    await newPlayerMember.roles.add(Game.playingId);
+    await newPlayerMember.roles.add(Game.aliveId);
+
+    await interaction.reply(
+      `Welcome \nUser Added: ${newPlayerMember.displayName}.\n\nNext Steps:\nFor the added player, if you want to turn them dead, give them dead role, and no vote role if they used their Ghost Vote.\nThank You!`
+    );
+  } catch (err) {
+    console.log('Error Occurred', err);
   }
-
-  addPlayer(newPlayer.id);
-
-  await newPlayerMember.roles.add(Game.townSquareRole);
-  await newPlayerMember.roles.add(Game.playingId);
-  await newPlayerMember.roles.add(Game.aliveId);
-
-  await interaction.reply(
-    `Welcome \nUser Added: ${newPlayerMember.displayName}.\n\nNext Steps:\nFor the added player, if you want to turn them dead, give them dead role, and no vote role if they used their Ghost Vote.\nThank You!`
-  );
   console.log(`--- PLAYER ADDED: ${newPlayerMember.displayName} ---`);
 }
 

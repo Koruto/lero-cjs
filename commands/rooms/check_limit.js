@@ -20,6 +20,8 @@ async function execute(interaction) {
     const roomsData = await db.get(getPlayerLimitQuery);
     const playerRoomLimit = roomsData[`_${interaction.user.id}`];
 
+    let message = ' ';
+
     if (roomLimit === 0) {
       message = 'No more rooms can be created. Room creation is frozen.';
     } else if (roomLimit < 0) {

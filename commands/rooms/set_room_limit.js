@@ -19,7 +19,7 @@ async function execute(interaction) {
 
   modifyRoomsLimit(newLimit);
 
-  let message;
+  let message = ' ';
   if (newLimit < 0) {
     message = 'Room limit remove. Can create unlimited rooms now';
   } else if (newLimit > 0) {
