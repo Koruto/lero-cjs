@@ -28,7 +28,7 @@ async function execute(interaction) {
   await townSquareChannel.permissionOverwrites.edit(interaction.guild.id, {
     SendMessages: true,
   });
-
+  console.log('--- NEW DAY STARTED --- ');
   // Send a confirmation message
 }
 

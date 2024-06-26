@@ -3,7 +3,7 @@ const { define_Game } = require('../../models/gameConstants');
 
 const data = new SlashCommandBuilder()
   .setName('update-game-database')
-  .setDescription('Updates Game Database! (In Development, not to be Used)')
+  .setDescription('Updates Game Database! (In Development, DO NOT USE THIS !!)')
   .setDefaultMemberPermissions(0x0000000000000008);
 
 async function execute(interaction) {

@@ -27,6 +27,7 @@ async function execute(interaction) {
   define_Rooms(playingMembers);
 
   await interaction.reply('Model Created!');
+  console.log('--- NEW MODELS CREATED FOR THE GAME ---');
 }
 
 module.exports = {
